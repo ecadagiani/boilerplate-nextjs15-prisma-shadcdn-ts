@@ -35,9 +35,7 @@ async function main() {
     data: {
       title: 'Understanding Kveik Yeast in Modern Brewing',
       slug: 'kveik-yeast-modern-brewing',
-      content: `# Kveik: Norwegian Farmhouse Yeast Revolution
-
-Kveik is a family of traditional Norwegian farmhouse yeast strains that has revolutionized modern brewing. 
+      content: `Kveik is a family of traditional Norwegian farmhouse yeast strains that has revolutionized modern brewing. 
 These remarkable yeasts can ferment at extremely high temperatures (30-40°C) while producing clean, fruity profiles.
 Their fast fermentation capabilities and unique characteristics make them a valuable tool for both traditional and craft brewers.
 
@@ -70,9 +68,7 @@ The diversity of Kveik strains offers brewers a wide palette of flavors:
     data: {
       title: 'Deep Dive into JavaScript Function Generators',
       slug: 'deep-dive-javascript-function-generators',
-      content: `# Understanding JavaScript Function Generators
-
-Function generators in JavaScript are powerful tools for creating iterative algorithms. Using the function* syntax and yield keyword, we can create functions that can be paused and resumed, making them perfect for handling streams of data and implementing complex iterative logic.
+      content: `Function generators in JavaScript are powerful tools for creating iterative algorithms. Using the function* syntax and yield keyword, we can create functions that can be paused and resumed, making them perfect for handling streams of data and implementing complex iterative logic.
 
 ## What Makes Generators Special?
 

@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -19,8 +20,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
+  breadcrumb,
   children,
 }: Readonly<{
+  breadcrumb: React.ReactNode;
   children: React.ReactNode;
 }>) {
   return (
@@ -28,7 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Navbar />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
+          {breadcrumb}
+          {children}
+        </div>
       </body>
     </html>
   );

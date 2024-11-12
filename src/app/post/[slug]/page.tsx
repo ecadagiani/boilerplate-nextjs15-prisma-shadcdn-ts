@@ -5,10 +5,11 @@ import ReactMarkdown from 'react-markdown';
 export default async function PostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   try {
-    const post = await getPost(params.slug);
+    const {slug} = await params;
+    const post = await getPost(slug);
 
     return (
       <article className="max-w-3xl mx-auto py-8 px-4">
