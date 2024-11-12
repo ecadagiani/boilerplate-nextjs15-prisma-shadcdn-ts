@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${NEXT_PORT}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - prisma_generated:/app/node_modules/.prisma/client
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      database:
+        condition: service_healthy
+    command: sh -c "npm run prisma:db:push && npm run dev"
+
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "${ADMINER_PORT}:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=database
+    depends_on:
+      - database
+
+  prisma-studio:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${PRISMA_STUDIO_PORT}:5555"
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    command: npm run prisma:studio
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  prisma_generated:

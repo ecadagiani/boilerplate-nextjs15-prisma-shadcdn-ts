@@ -1,36 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js 15 Full-Stack Template
+
+A modern, Docker-ready full-stack template built with Next.js 15, Prisma ORM, and shadcn/ui components. This template provides a robust starting point for building scalable web applications with a clean architecture and developer-friendly setup.
+
+## Features
+
+- 🚀 **Next.js 15** with App Router
+- 🛢️ **Prisma ORM** with PostgreSQL
+- 🎨 **shadcn/ui** components
+- 🎯 **TypeScript** for type safety
+- 🐳 **Docker** configuration for development
+- 🔧 **Development Tools**:
+  - Prisma Studio for database management
+  - Adminer for database administration
+
+## Architecture Decisions
+
+This is an opinionated template that deliberately separates API logic from server components. All backend and API logic is contained within `src/app/api`, keeping server components clean from direct database interactions.
+
+### Pros:
+
+- **Single Responsibility Principle**: Each part of the application has a clear, focused role
+- **Future-Proof**: Makes it easier to migrate the backend to a separate API service later (enabling load balancing, versioning, work with specialized developers etc.)
+- **Enhanced Security**: Reduces the risk of accidentally exposing backend logic to the client
+
+### Cons:
+
+- **Additional Code**: Requires writing HTTP logic between services and API endpoints
+- **Performance Overhead**: Even server components make HTTP requests locally, adding a small computational cost
+
+## Prerequisites
+
+- Docker and Docker Compose
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone and Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone [repository-url]
+cd [project-name]
+
+# Copy environment file
+cp .env.dist .env
+
+# Install dependencies
+npm install
+
+# Generate Prisma types
+npm run prisma:generate
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Update [`.env`](.env) file with your variables, database credentials, and ports.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Launch with Docker
 
-## Learn More
+```bash
+# Build and start all services
+docker-compose up -d --build
+```
 
-To learn more about Next.js, take a look at the following resources:
+The application will be available at:
+- Next.js App: `http://localhost:3000`
+- Prisma Studio: `http://localhost:5555`
+- Adminer: `http://localhost:8080`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> You can change the ports in the `.env` file.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Seed the Database
 
-## Deploy on Vercel
+```bash
+npm run docker:prisma:db:seed
+```
+> or in local development
+> ```bash
+> npm run prisma:db:seed
+> ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Database Management
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### During development, apply schema without migration
+
+When you modify the Prisma schema and want to test changes without creating a migration:
+
+1. Push schema changes directly to the database:
+```bash
+npm run docker:prisma:db:push
+```
+
+2. The command will:
+   - Push the schema changes to the database
+   - Regenerate Prisma Client
+
+### Seeding the Database
+
+To populate your database with initial data:
+
+```bash
+# For Docker environment (recommended)
+npm run docker:prisma:db:seed
+
+# For local development
+npm run prisma:db:seed
+```
+
+The command will execute the seed script defined in `prisma/seed.ts` to create initial data in your database.
+
+### Before commit, apply schema changes
+When you modify the Prisma schema [`prisma/schema.prisma`](prisma/schema.prisma), you need to:
+
+1. Generate a new migration:
+```bash
+npm run docker:prisma:migrate:dev
+```
+
+2. The command will:
+   - Create a new migration file
+   - Apply the migration to your database
+   - Regenerate Prisma Client
+
+## Development Workflow
+
+### Docker Development (Recommended)
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+#### Installing New Dependencies
+
+When adding new npm packages to the project:
+
+1. Install the package locally first:
+```bash
+npm install package-name
+```
+
+2. Rebuild the Docker container to include the new dependency:
+```bash
+docker-compose up -d --build
+```
+
+> Note: The rebuild is necessary because dependencies are installed inside the Docker container during the build process.
+
+### Local Development
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
