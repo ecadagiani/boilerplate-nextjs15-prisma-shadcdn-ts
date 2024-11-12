@@ -6,6 +6,7 @@ export async function stripMarkdown(content: string) {
   const file = await remark().use(strip).process(content);
   return String(file);
 }
+
 /**
  * Finds the last index of a regex match in a string
  * @param string The string to search in

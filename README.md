@@ -109,7 +109,7 @@ npm run prisma:db:seed
 The command will execute the seed script defined in `prisma/seed.ts` to create initial data in your database.
 
 ### Before commit, apply schema changes
-When you modify the Prisma schema [`prisma/schema.prisma`](prisma/schema.prisma), you need to:
+When you modify the Prisma schema [`prisma/schema/schema.prisma`](prisma/schema/schema.prisma), you need to:
 
 1. Generate a new migration:
 ```bash
