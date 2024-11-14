@@ -39,8 +39,8 @@ const PostCard = memo(function PostCard({ title, author, categories, createdAt, 
             <p className="line-clamp-3">
               {excerpt}
               {' '}
-              <Button asChild variant="link" className="px-0 inline">
-                <Link href={`/post/${slug}`}>read more</Link>
+              <Button variant="link" className="px-0 inline">
+                read more
               </Button>
             </p>
             <p>By: {author.name || author.email}</p>

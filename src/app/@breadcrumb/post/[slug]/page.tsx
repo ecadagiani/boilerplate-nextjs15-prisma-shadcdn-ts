@@ -1,5 +1,5 @@
 import BreadcrumbComponent from '@/components/BreadcrumbComponent';
-import { getPost } from '@/services/posts';
+import { getPost } from '@/query/posts';
 import { notFound } from 'next/navigation';
 export default async function BreadcrumbSlot({params}: {params: Promise<{slug: string}>}) {
   const {slug} = await params;
@@ -14,7 +14,8 @@ export default async function BreadcrumbSlot({params}: {params: Promise<{slug: s
       current={post.title}
       />
     );
-  } catch (error) {
+  } catch (_error) {
+    console.error(_error);
     return notFound();
   }
 }

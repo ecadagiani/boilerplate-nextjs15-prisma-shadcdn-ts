@@ -4,10 +4,15 @@
     "next/typescript"
   ],
   "rules": {
+    "indent": [
+      "error",
+      2
+    ],
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
-        "argsIgnorePattern": "^_.*$|^_$"
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
       }
     ]
   }

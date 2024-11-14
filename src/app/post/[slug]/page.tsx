@@ -1,4 +1,4 @@
-import { getPost } from '@/services/posts';
+import { getPost } from '@/query/posts';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 
@@ -9,6 +9,7 @@ export default async function PostPage({
 }) {
   try {
     const {slug} = await params;
+    // used like this, the PostPage is a server component, it will be prerendered during next build to a static page
     const post = await getPost(slug);
 
     return (

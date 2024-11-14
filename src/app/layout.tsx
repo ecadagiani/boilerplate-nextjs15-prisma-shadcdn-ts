@@ -1,7 +1,11 @@
+import { auth } from "@/auth";
 import Navbar from "@/components/Navbar";
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
+import SessionProvider from "@/providers/SessionProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,7 +23,7 @@ export const metadata: Metadata = {
   description: "Blog",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   breadcrumb,
   children,
 }: Readonly<{
@@ -30,12 +34,16 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
-          {breadcrumb}
-          {children}
-        </div>
+        >
+        <ReactQueryProvider>
+          <SessionProvider>
+            <Navbar />
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
+              {breadcrumb}
+              {children}
+            </div>
+          </SessionProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
