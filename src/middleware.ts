@@ -1,13 +1,47 @@
+import { Role } from "@prisma/client";
+import NextAuth, { type Session } from "next-auth";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import authConfig from "./auth.config";
+import { Paths } from "./constants/paths";
+ 
+const { auth } = NextAuth({
+  ...authConfig,
+  providers: [],
+  session: {
+    strategy: "jwt",
+  },
+});
 
-// Add nextAuth redirection when nextAuth V5 is released
 
-export function middleware(request: NextRequest) {
+export default auth((request: NextRequest & { auth: Session | null }) =>{
   const headers = new Headers(request.headers);
   headers.set("x-current-path", request.nextUrl.pathname);
+
+  const isConnected = request.auth !== null;
+  const userRole = request.auth?.user?.role;
+
+  const homeURL = new URL(Paths.HOME, request.nextUrl.origin);
+  const loginURLWithCallback = new URL(Paths.LOGIN, request.nextUrl.origin);
+  loginURLWithCallback.searchParams.set("callbackUrl", request.nextUrl.pathname);
+
+  if(request.nextUrl.pathname.startsWith(Paths.ADMIN) && userRole !== Role.ADMIN) {
+    if(!isConnected) {
+      return NextResponse.redirect(loginURLWithCallback);
+    }
+    return NextResponse.redirect(homeURL);
+  }
+
+  if(request.nextUrl.pathname.startsWith(Paths.DASHBOARD) && !isConnected) {
+    return NextResponse.redirect(loginURLWithCallback);
+  }
+
+  if(request.nextUrl.pathname.startsWith(Paths.LOGIN) && isConnected) {
+    return NextResponse.redirect(homeURL);
+  }
+
   return NextResponse.next({ headers });
-}
+});
 
 export const config = {
   matcher: [

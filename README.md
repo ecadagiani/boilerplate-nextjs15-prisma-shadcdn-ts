@@ -7,11 +7,12 @@ A modern, Docker-ready full-stack template built with Next.js 15, Prisma ORM, an
 - 🚀 **Next.js 15** with App Router
 - 🛢️ **Prisma ORM** with PostgreSQL
 - 🎨 **shadcn/ui** components
+- 🔐 **NextAuth** for authentication (with simple role enum access control)
 - 🎯 **TypeScript** for type safety
 - 🐳 **Docker** configuration for development
 - 🔧 **Development Tools**:
   - Prisma Studio for database management
-  - Adminer for database administration
+  - Adminer to view prisma modifications
 
 ## Architecture Decisions
 

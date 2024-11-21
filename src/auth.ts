@@ -1,4 +1,3 @@
-import { Paths } from "@/constants/paths";
 import prisma from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Role } from "@prisma/client";
@@ -6,7 +5,7 @@ import bcrypt from "bcrypt";
 import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
- 
+import authConfig from "./auth.config";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JWT } from "next-auth/jwt";
 declare module "next-auth/jwt" {
@@ -32,28 +31,11 @@ declare module "next-auth" {
  
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  pages: {
-    signIn: Paths.LOGIN
-  },
-  debug: process.env.NODE_ENV === "development",
-  session:{
+  ...authConfig,
+  adapter: PrismaAdapter(prisma),
+  session: {
     strategy: "jwt",
   },
-  callbacks: {
-    jwt({ token, user }) { // {account, trigger}
-      if(user) {
-        token.id = user.id;
-        token.role = user.role;
-      }
-      return token;
-    },
-    session({ session, token }) { // {user}
-      if(token.id) session.user.id = token.id;
-      if(token.role) session.user.role = token.role;
-      return session
-    },
-  },
-  adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
       credentials: {
