@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Paths } from "@/constants/paths"
 import Link from 'next/link'
 
 export default function NotFound() {
@@ -13,7 +14,7 @@ export default function NotFound() {
           </p>
         </div>
         <div className="h-px w-32 bg-gray-200 mx-auto my-8" />
-        <Link href="/" legacyBehavior passHref>
+        <Link href={Paths.HOME} legacyBehavior passHref>
           <Button
             variant="default"
             size="lg"

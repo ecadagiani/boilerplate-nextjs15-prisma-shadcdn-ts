@@ -1,7 +1,8 @@
-'use client';
-import { isProtectedRoute } from '@/auth';
-import { signIn, signOut } from 'next-auth/react';
-import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+'use server';
+
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
+import { isRedirectError } from 'next/dist/client/components/redirect';
 
 export type LoginResult = {
   ok: boolean;
@@ -10,45 +11,27 @@ export type LoginResult = {
 }
 
 export async function login(
-  router: AppRouterInstance,
-  pathname: string,
-  prevState: LoginResult,
+  state: LoginResult,
   formData: FormData,
 ): Promise<LoginResult> {
   const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-
-  const res = await signIn("credentials", {
-    email,
-    password,
-    redirect: false
-  });
-
-  if(!res?.ok) {
-    switch (res?.error) {
-    case 'CredentialsSignin':
-      return {errorMessage: 'Invalid credentials.', email, ok: false};
-    default:
-      return {errorMessage: 'Something went wrong.', email, ok: false};
+  try{
+    await signIn("credentials", formData);
+    return {ok: true};
+  } catch(error) {
+    if(isRedirectError(error)) {
+      throw error;
     }
-  }
 
-  if(pathname.startsWith('/login')) {
-    router.push('/dashboard');
+    if(error instanceof AuthError) {
+      switch (error.type) {
+      case 'CredentialsSignin':
+        return {ok: false, errorMessage: 'Invalid credentials', email};
+      default:
+        return {ok: false, errorMessage: "Something went wrong.", email};
+      }
+    }
+    console.error("login error", error);
+    throw error;
   }
-
-  return {ok: true};
-}
-
-export async function logout(router: AppRouterInstance, pathname: string) {
-  if (isProtectedRoute(pathname)) {
-    // We push to '/' before signOut to prevent the LoginDialog from appearing.
-    // This fixes an issue where the dialog would briefly show when logging out from a protected route (useEffect in LoginDialog),
-    // because the component would re-render as unauthenticated while still on the protected path.
-    router.push('/');
-  }
-  await signOut({
-    redirect: false,
-    callbackUrl: '/',
-  });
 }

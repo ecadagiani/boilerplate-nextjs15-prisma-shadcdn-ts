@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Paths } from '@/constants/paths'
 import Link from 'next/link'
 import { memo } from 'react'
+import { Badge } from './ui/badge'
 
 type PostCardProps = {
   title: string
@@ -22,17 +24,21 @@ type PostCardProps = {
 
 const PostCard = memo(function PostCard({ title, author, categories, createdAt, excerpt, slug }: PostCardProps) {
   return (
-    <Link href={`/post/${slug}`}>
-      <Card className="overflow-hidden h-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:shadow-lg transition-shadow duration-300 hover:cursor-pointer">
+    <Link href={Paths.POST(slug)} className="block  [&_*]:cursor-pointer">
+      <Card className="
+        overflow-hidden h-full bg-white dark:bg-zinc-800
+        border border-zinc-200 dark:border-zinc-700 
+        hover:shadow-lg transition-shadow duration-300
+      ">
         <CardHeader className="p-4">
           <CardTitle className="text-lg font-semibold text-zinc-900 dark:text-white">{title}</CardTitle>
           <div className="flex flex-wrap gap-2">
-              {categories.map((c) => (
-                <span key={c.category.name} className="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-zinc-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300">
-                  {c.category.name}
-                </span>
-              ))}
-            </div>
+            {categories.map((c) => (
+              <Badge key={c.category.name} variant='outline'>
+                {c.category.name}
+              </Badge>
+            ))}
+          </div>
         </CardHeader>
         <CardContent className="p-4 pt-0 text-sm space-y-4">
           <div className="space-y-2 text-zinc-600 dark:text-zinc-400">

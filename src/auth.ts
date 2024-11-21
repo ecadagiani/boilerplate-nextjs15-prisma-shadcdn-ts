@@ -1,27 +1,89 @@
-import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
-import type { NextAuthOptions } from "next-auth";
-import { getServerSession } from "next-auth/next";
+import { Paths } from "@/constants/paths";
+import prisma from "@/lib/db";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import type { Role } from "@prisma/client";
+import bcrypt from "bcrypt";
+import NextAuth, { type DefaultSession } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { z } from "zod";
+ 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { JWT } from "next-auth/jwt";
+declare module "next-auth/jwt" {
+  /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
+  interface JWT {
+    id?: string
+    role?: Role
+  }
+}
 
-export const authFrontOptions = {  
+declare module "next-auth" {
+  // augment the session type
+  interface Session {
+    user: {
+      role: Role
+      id: string
+    } & DefaultSession["user"]
+  }
+  interface User  {
+    role?: Role
+  }
+}
+ 
+
+export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
-    signIn: "/login" // can be customised
+    signIn: Paths.LOGIN
   },
   debug: process.env.NODE_ENV === "development",
-  providers: [],
-} satisfies NextAuthOptions
+  session:{
+    strategy: "jwt",
+  },
+  callbacks: {
+    jwt({ token, user }) { // {account, trigger}
+      if(user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
+      return token;
+    },
+    session({ session, token }) { // {user}
+      if(token.id) session.user.id = token.id;
+      if(token.role) session.user.role = token.role;
+      return session
+    },
+  },
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    Credentials({
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
+      },
+      authorize: async (credentials) => {
+        try{
+          const parsedCredentials = z
+            .object({ email: z.string().email(), password: z.string().min(6) })
+            .safeParse(credentials);
+          
+          if (parsedCredentials.success) {
+            const { email, password } = parsedCredentials.data;
+            const user = await prisma.user.findUnique({
+              where: { email },
+            }); 
+            if (!user) return null;
+            const passwordsMatch = await bcrypt.compare(password, user.password);
 
-// Use it in server contexts
-export function auth(
-  ...args:
-    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
-    | [NextApiRequest, NextApiResponse]
-    | []
-) {
-  return getServerSession(...args, authFrontOptions)
-}
-
-export function isProtectedRoute(pathname: string) {
-  if(!pathname.startsWith('/')) pathname = '/' + pathname;
-
-  return pathname.startsWith('/dashboard') || pathname.startsWith('/admin');
-}
+            if (passwordsMatch) {
+              return user;
+            }
+          }
+          return null;
+        } catch(error) {
+          console.error("providers Credentials authorize error", error);
+          return null;
+        }
+      },
+    })
+  ]
+})

@@ -7,11 +7,12 @@ import React from "react";
 
 export function ReactQueryProvider({ children }: React.PropsWithChildren) {
   const [client] = React.useState(new QueryClient());
+  const displayDevtools = false;
 
   return (
     <QueryClientProvider client={client}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {displayDevtools && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

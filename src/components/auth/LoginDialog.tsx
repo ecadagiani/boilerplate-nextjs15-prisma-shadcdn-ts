@@ -1,6 +1,5 @@
 "use client"
 
-import { isProtectedRoute } from "@/auth"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,6 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Paths } from "@/constants/paths"
+import { isRoute } from "@/utils/route"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -23,28 +24,20 @@ export function LoginDialog({className}: {className: string}) {
   const pathname = usePathname();
 
   useEffect(() => {
-    if(isProtectedRoute(pathname) && session.status !== 'authenticated') {
+    if(isRoute(pathname, Paths.DASHBOARD) && session.status !== 'authenticated') {
       setOpen(true);
     }
   }, [session, pathname]);
 
   const handleOpenChange = (open: boolean) => {
-    if(isProtectedRoute(pathname) && !open) {
+    if(isRoute(pathname, Paths.DASHBOARD) && !open) {
       router.push('/');
     }
     setOpen(open);
   }
 
-  const handleSuccess = () => {
-    setOpen(false);
-    if(isProtectedRoute(pathname)) {
-      // if we are on a protected route, the page display an unauthenticated message, and LoginDialog is open.
-      // when login is successful, we refresh the page, to refresh dashboard or admin layout (server component) to display the authenticated page.
-      router.refresh();
-    }
-  }
-
-
+  // we do not need to close LoginDialog when login is successful,
+  // because the LoginDialog is unmounted by the navbar when login is successful
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -60,11 +53,11 @@ export function LoginDialog({className}: {className: string}) {
             Please enter your credentials to continue.
           </DialogDescription>
         </DialogHeader>
-        <LoginForm onSuccess={handleSuccess}  />
+        <LoginForm />
       
         <Link // todo use button if pathname is not protected
           onClick={() => setOpen(false)}
-          href={isProtectedRoute(pathname) ? "/" : pathname} 
+          href={isRoute(pathname, Paths.DASHBOARD) || isRoute(pathname, Paths.ADMIN) ? Paths.HOME : pathname} 
           className="w-full text-center py-2 border border-black hover:bg-black hover:text-white transition-colors duration-200 rounded-md text-sm font-medium"
         >
         Go Back

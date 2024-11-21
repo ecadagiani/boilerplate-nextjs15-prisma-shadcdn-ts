@@ -1,10 +1,10 @@
 import BreadcrumbComponent from '@/components/BreadcrumbComponent';
-import { getPost } from '@/query/posts';
+import { queryPost } from '@/query/posts';
 import { notFound } from 'next/navigation';
 export default async function BreadcrumbSlot({params}: {params: Promise<{slug: string}>}) {
   const {slug} = await params;
   try {
-    const post = await getPost(slug);
+    const post = await queryPost(slug);
     return (
     <BreadcrumbComponent
       items={[

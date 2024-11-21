@@ -1,7 +1,10 @@
 import prisma from '@/lib/db';
+import type { PostWithRelations } from '@/types/posts';
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request
+): Promise<NextResponse<{ posts: PostWithRelations[] } | {error: string}>> {
   try {
     const { searchParams } = new URL(request.url);
     const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc';

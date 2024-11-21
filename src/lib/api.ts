@@ -7,4 +7,19 @@ export const api = axios.create({
   },
 });
 
+// Request interceptor
+api.interceptors.request.use(
+  async (config) => {
+    // const session = await getSession();
+    // console.log("api request session", session)
+    // if (session) {
+    //   config.headers.Authorization = `Bearer ${session.accessToken}`;
+    // }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export default api;

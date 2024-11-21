@@ -15,7 +15,7 @@ A modern, Docker-ready full-stack template built with Next.js 15, Prisma ORM, an
 
 ## Architecture Decisions
 
-This is an opinionated template that deliberately separates API logic from server components. All backend logic is contained within `src/app/api`, keeping server components clean from direct database interactions. *Because backend is not only recover a list of pokemon or posts, in real world, it's business logic. And it can be sooooooo complicated*
+This is an opinionated template that deliberately separates API logic from server components. All backend logic is contained within `src/app/api`, keeping server components clean from direct database interactions. *Because backend is not only recover a list of pokemons or posts, in real world, it's business logic. And it can be sooooooo complicated*
 
 There is 3 logics layers:
 - `backend`: for a traditional backend logic, with database access, etc. In `src/app/api`, with variables named with `.*Backend.*`

@@ -5,31 +5,24 @@ import { login } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Paths } from '@/constants/paths';
 import { Loader2 } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useActionState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useActionState, useMemo } from 'react';
 
-type LoginFormProps = {
-  onSuccess?: () => void;
-}
 
-export default function LoginForm({onSuccess}: LoginFormProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  
+export default function LoginForm() {
+  const searchParams = useSearchParams();
+  const redirectTo = useMemo(() => searchParams.get('callbackUrl') ?? Paths.HOME, [searchParams]);
+
   const [loginState, formAction, isPending] = useActionState<LoginResult, FormData>(
-    login.bind(null, router, pathname),
+    login,
     {ok: false},
   );
 
-  useEffect(() => {
-    if(loginState.ok && onSuccess) {
-      onSuccess();
-    }
-  }, [loginState, onSuccess]);
-  
   return (
     <form action={formAction} className="grid gap-4">
+      <input type="hidden" name="redirectTo" value={redirectTo} />
       <div className="grid gap-2">
         <Label htmlFor="email">Email</Label>
         <Input

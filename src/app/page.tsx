@@ -2,7 +2,7 @@
 
 import PostCard, { PostCardSkeleton } from '@/components/PostCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { getPosts } from '@/query/posts';
+import { queryPosts } from '@/query/posts';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -12,7 +12,7 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const { data: posts, isLoading } = useQuery({
     queryKey: ['posts', sortOrder],
-    queryFn: () => getPosts(sortOrder),
+    queryFn: () => queryPosts(sortOrder),
   });
 
 
@@ -55,7 +55,7 @@ export default function Home() {
         ) : (
           posts?.map((post) => (
             <div key={post.id} className="transform transition-all hover:-translate-y-1">
-              <PostCard {...post} />
+              <PostCard key={post.id} {...post} />
             </div>
           ))
         )}

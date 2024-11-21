@@ -1,7 +1,4 @@
-'use client';
-
-import { LoginDialog } from "@/components/LoginDialog";
-import LogoutButton from "@/components/LogoutButton";
+import LogoutButton from "@/components/auth/LogoutButton";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,20 +9,16 @@ import {
   navigationMenuTriggerStyle,
   NavigationMenuViewport
 } from "@/components/ui/navigation-menu";
+import { Paths } from "@/constants/paths";
 import { cn } from "@/utils/shadcn";
-import { Home, Loader2, Pencil, User } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { Home, Pencil, User } from "lucide-react";
+import type { Session } from "next-auth";
 import Link from "next/link";
 
 const UserNavigation = () => {
-  const { data: session } = useSession();
   
   return (
     <ul className="grid w-[200px] gap-2 p-4">
-      <div className="flex items-center gap-2 p-2 border-b border-zinc-200 dark:border-zinc-800">
-        <User className="h-4 w-4" />
-        <span className="text-sm">{session?.user?.name}</span>
-      </div>
       <li>
         <NavigationMenuLink asChild>
           <Link
@@ -33,7 +26,7 @@ const UserNavigation = () => {
             w-full
             flex justify-start items-center gap-2 p-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors
             "
-            href="/dashboard"
+            href={Paths.DASHBOARD}
           >
             <Pencil className="h-4 w-4" />
             My Posts
@@ -49,9 +42,10 @@ const UserNavigation = () => {
   );
 };
 
-export default function Navbar() {
-  const { data: sessionData, status } = useSession();
-  
+export default function Navbar({ session }: { session: Session | null }) {
+  const status = session ? 'authenticated' : 'unauthenticated';
+  const sessionData = session;
+  // const { data: sessionData, status } = useSession();
   return (
     <header className="
       sticky
@@ -64,10 +58,13 @@ export default function Navbar() {
       <NavigationMenu >
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/" className={cn(
-              navigationMenuTriggerStyle(),
-              "flex items-center gap-2"
-            )}>
+            <Link 
+              href={Paths.HOME}
+              className={cn(
+                navigationMenuTriggerStyle(),
+                "flex items-center gap-2"
+              )}
+            >
               <Home className="h-4 w-4" />
               Home
             </Link>
@@ -76,15 +73,11 @@ export default function Navbar() {
       </NavigationMenu>
       <NavigationMenu withViewport={false}>
         <NavigationMenuList>
-          {status === 'loading' ? (
-            <NavigationMenuItem>
-              <Loader2 className="h-4 w-4 animate-spin" />
-            </NavigationMenuItem>
-          ) : status === 'authenticated' && sessionData.user ? (
+          {status === 'authenticated' ? (
             <NavigationMenuItem>
               <NavigationMenuTrigger className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span className="text-sm">{sessionData.user.name}</span>
+                <span className="text-sm">{sessionData?.user.name}</span>
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <UserNavigation />
@@ -92,7 +85,9 @@ export default function Navbar() {
             </NavigationMenuItem>
           ) : (
             <NavigationMenuItem>
-              <LoginDialog className={navigationMenuTriggerStyle()} />
+              <Link href={Paths.LOGIN} className={navigationMenuTriggerStyle()}>
+                Login
+              </Link>
             </NavigationMenuItem>
           )}
         </NavigationMenuList>

@@ -3,7 +3,7 @@ import type { PostWithRelations, PostWithRelationsAndExcerpt } from "@/types/pos
 import { excerptFromMarkdown } from "@/utils/string";
 import BPromise from "bluebird";
 
-export async function getPosts(sortOrder: 'desc' | 'asc' = 'desc'): Promise<PostWithRelationsAndExcerpt[]> {
+export async function queryPosts(sortOrder: 'desc' | 'asc' = 'desc'): Promise<PostWithRelationsAndExcerpt[]> {
   const response = await api.get('/post', {
     params: { sortOrder },
   });
@@ -14,11 +14,11 @@ export async function getPosts(sortOrder: 'desc' | 'asc' = 'desc'): Promise<Post
 
   return BPromise.map(response.data.posts, async (post: PostWithRelations) => ({
     ...post,
-    excerpt: await excerptFromMarkdown(post.content, 100),
+    excerpt: await excerptFromMarkdown(post.content, 80),
   }));
 }
 
-export async function getPost(slug: string): Promise<PostWithRelations> {
+export async function queryPost(slug: string): Promise<PostWithRelations> {
   const response = await api.get(`/post/${slug}`);
 
   if (response.status !== 200) {

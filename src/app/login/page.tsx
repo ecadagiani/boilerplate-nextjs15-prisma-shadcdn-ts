@@ -1,6 +1,9 @@
+'use server';
+
 import { auth } from '@/auth';
-import LoginForm from '@/components/LoginForm';
+import LoginForm from '@/components/auth/LoginForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Paths } from '@/constants/paths';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
  
@@ -8,7 +11,7 @@ export default async function LoginPage() {
   const session = await auth();
 
   if(session) {
-    redirect('/dashboard');
+    redirect(Paths.DASHBOARD);
   }
 
   return (
@@ -25,7 +28,7 @@ export default async function LoginPage() {
         <CardContent>
           <LoginForm />
           <Link 
-            href="/"
+            href={Paths.HOME}
             className="
               inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium 
               transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 

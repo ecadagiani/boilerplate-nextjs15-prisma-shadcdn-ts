@@ -1,10 +1,11 @@
 import prisma from '@/lib/db';
+import type { PostWithRelations } from '@/types/posts';
 import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
-) {
+): Promise<NextResponse<{ post: PostWithRelations | {error: string} }>> {
   try {
     const {slug} = await params;
     const post = await prisma.post.findUnique({

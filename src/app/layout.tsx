@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import Navbar from "@/components/Navbar";
 import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
-import SessionProvider from "@/providers/SessionProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -30,19 +29,18 @@ export default async function RootLayout({
   breadcrumb: React.ReactNode;
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+      >
         <ReactQueryProvider>
-          <SessionProvider>
-            <Navbar />
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
-              {breadcrumb}
-              {children}
-            </div>
-          </SessionProvider>
+          <Navbar session={session} />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
+            {breadcrumb}
+            {children}
+          </div>
         </ReactQueryProvider>
       </body>
     </html>
