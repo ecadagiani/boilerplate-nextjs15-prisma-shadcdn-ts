@@ -1,39 +1,20 @@
-import prisma from '@/lib/db';
+import { internalServerError, jsonData } from '@/lib/apiResponse';
+import { getPosts } from '@/services/post';
 import type { PostWithRelations } from '@/types/posts';
-import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request
-): Promise<NextResponse<{ posts: PostWithRelations[] } | {error: string}>> {
+){
   try {
     const { searchParams } = new URL(request.url);
-    const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc';
-    const posts = await prisma.post.findMany({
-      include: {
-        author: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-        categories: {
-          include: {
-            category: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: sortOrder,
-      },
-      take: 20,
+    const posts = await getPosts({ 
+      published: true,
+      sortOrder: searchParams.get('sortOrder') as 'asc' | 'desc' ?? undefined,
     });
 
-    return NextResponse.json({ posts });
+    return jsonData<{posts: PostWithRelations[]}>({posts})
   } catch (error) {
     console.error('Failed to fetch posts:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch posts' },
-      { status: 500 }
-    );
+    return internalServerError()
   }
 }

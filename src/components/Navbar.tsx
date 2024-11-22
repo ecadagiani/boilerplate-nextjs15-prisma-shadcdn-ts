@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Paths } from "@/constants/paths";
 import { cn } from "@/utils/shadcn";
-import { Home, Pencil, User } from "lucide-react";
+import { Home, Pencil, PlusCircle, User } from "lucide-react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 
@@ -69,6 +69,34 @@ export default function Navbar({ session }: { session: Session | null }) {
               Home
             </Link>
           </NavigationMenuItem>
+          {status === 'authenticated' && (
+            <>
+              <NavigationMenuItem>
+                <Link
+                  href={Paths.DASHBOARD}
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "flex items-center gap-2"
+                  )}
+                >
+                  <Pencil className="h-4 w-4" />
+                  My Posts
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link
+                  href={Paths.NEW}
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "flex items-center gap-2"
+                  )}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  New Post
+                </Link>
+              </NavigationMenuItem>
+            </>
+          )}
         </NavigationMenuList>
       </NavigationMenu>
       <NavigationMenu withViewport={false}>

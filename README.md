@@ -14,26 +14,6 @@ A modern, Docker-ready full-stack template built with Next.js 15, Prisma ORM, an
   - Prisma Studio for database management
   - Adminer to view prisma modifications
 
-## Architecture Decisions
-
-This is an opinionated template that deliberately separates API logic from server components. All backend logic is contained within `src/app/api`, keeping server components clean from direct database interactions. *Because backend is not only recover a list of pokemons or posts, in real world, it's business logic. And it can be sooooooo complicated*
-
-There is 3 logics layers:
-- `backend`: for a traditional backend logic, with database access, etc. In `src/app/api`, with variables named with `.*Backend.*`
-- `server components`: for server components logic from nextJS, with server session, etc. with variables named with `.*Frontend.*`
-- `client components`: for client components logic from nextJS, with react hooks, etc. with variables named with `.*Frontend.*`
-
-### Pros:
-
-- **Single Responsibility Principle**: Each part of the application has a clear, focused role
-- **Future-Proof**: Makes it easier to migrate the backend to a separate API service later (enabling load balancing, versioning, work with specialized developers etc.)
-- **Enhanced Security**: Reduces the risk of accidentally exposing backend logic to the client
-
-### Cons:
-
-- **Additional Code**: Requires writing HTTP logic between services and API endpoints
-- **Performance Overhead**: Even server components make HTTP requests locally, adding a small computational cost
-
 ## Prerequisites
 
 - Docker and Docker Compose

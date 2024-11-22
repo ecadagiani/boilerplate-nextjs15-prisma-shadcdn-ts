@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { memo } from 'react'
 import { Badge } from './ui/badge'
 
-type PostCardProps = {
+export type PostCardProps = {
   title: string
   slug: string
   author: {
@@ -18,11 +18,11 @@ type PostCardProps = {
       name: string
     }
   }>
-  createdAt: Date
+  published: Date | null
   excerpt: string
 }
 
-const PostCard = memo(function PostCard({ title, author, categories, createdAt, excerpt, slug }: PostCardProps) {
+const PostCard = memo(function PostCard({ title, author, categories, published, excerpt, slug }: PostCardProps) {
   return (
     <Link href={Paths.POST(slug)} className="block  [&_*]:cursor-pointer">
       <Card className="
@@ -51,7 +51,7 @@ const PostCard = memo(function PostCard({ title, author, categories, createdAt, 
             </p>
             <p>By: {author.name || author.email}</p>
             <p className="text-xs text-zinc-500 dark:text-zinc-500">
-              Published: {new Date(createdAt).toLocaleDateString()}
+              Published: {new Date(published).toLocaleDateString()}
             </p>
           </div>
         </CardContent>

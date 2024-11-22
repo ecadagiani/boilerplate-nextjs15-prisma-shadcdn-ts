@@ -3,5 +3,5 @@
 
 
 export default function BreadcrumbDefaultSlot() {
-    return null;
+  return null;
 }

@@ -54,6 +54,7 @@ The diversity of Kveik strains offers brewers a wide palette of flavors:
 * **Oslo**: Clean, neutral profile - perfect for lager-style beers
 * etc`,
       authorId: john.id,
+      published: new Date(),
       categories: {
         create: [
           {
