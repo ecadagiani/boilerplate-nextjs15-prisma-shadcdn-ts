@@ -85,7 +85,7 @@ const PostEditorCard = memo(function PostEditorCard({
                 text-destructive hover:bg-destructive hover:text-destructive-foreground
                 ${!published && 'bg-white dark:bg-zinc-800'}
               `}
-            onClick={() => onDelete?.(slug)}
+            onClick={() => onDelete?.(slug)} // todo add alert dialog
           >
             <Trash2 className="h-4 w-4" />
           </Button>

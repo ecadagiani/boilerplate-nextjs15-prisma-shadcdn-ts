@@ -15,8 +15,6 @@ const { auth } = NextAuth({
 
 
 export default auth((request: NextRequest & { auth: Session | null }) =>{
-  const headers = new Headers(request.headers);
-  headers.set("x-current-path", request.nextUrl.pathname);
 
   const isConnected = request.auth !== null;
   const userRole = request.auth?.user?.role;
@@ -39,8 +37,11 @@ export default auth((request: NextRequest & { auth: Session | null }) =>{
   if(request.nextUrl.pathname.startsWith(Paths.LOGIN) && isConnected) {
     return NextResponse.redirect(homeURL);
   }
-
-  return NextResponse.next({ headers });
+  
+  // this method is important, is the only way to set a new header, and keep returning data from server actions
+  const response = NextResponse.next();
+  response.headers.set("x-current-path", request.nextUrl.pathname);
+  return response;
 });
 
 export const config = {

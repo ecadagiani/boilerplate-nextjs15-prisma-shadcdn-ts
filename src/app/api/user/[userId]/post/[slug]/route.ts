@@ -1,5 +1,5 @@
-import prisma from '@/lib/db';
-import type { PostWithRelations } from '@/types/posts';
+import prisma from '@/lib/prisma';
+import type { PostWithRelations } from '@/lib/types/posts';
 import { NextResponse } from 'next/server';
 
 export async function GET(

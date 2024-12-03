@@ -1,4 +1,5 @@
-import { getPost } from '@/services/post';
+import DefaultLayout from '@/components/DefaultLayout';
+import { getPost } from '@/lib/services/post';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 
@@ -17,9 +18,12 @@ export default async function PostPage({
     }
 
     return (
-      <article className="max-w-3xl mx-auto py-8 px-4">
+      <DefaultLayout 
+        title={post.title} 
+        titleClassName="tracking-tight text-zinc-900 dark:text-white text-4xl font-bold mb-4 text-left"
+        className="max-w-3xl mx-auto py-8 px-4"
+      >
         <header className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
           <div className="text-sm text-muted-foreground space-y-1">
             <p>By: {post.author.name || post.author.email}</p>
             <p>
@@ -35,7 +39,7 @@ export default async function PostPage({
         <div className="prose prose-zinc dark:prose-invert max-w-none">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
-      </article>
+      </DefaultLayout>
     );
   } catch (_error) {
     notFound();

@@ -1,5 +1,5 @@
 import BreadcrumbComponent from '@/components/BreadcrumbComponent';
-import { getPost } from '@/services/post';
+import { getPost } from '@/lib/services/post';
 import { notFound } from 'next/navigation';
 export default async function BreadcrumbSlot({params}: {params: Promise<{slug: string}>}) {
   const {slug} = await params;

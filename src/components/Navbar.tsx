@@ -23,7 +23,7 @@ const UserNavigation = () => {
         <NavigationMenuLink asChild>
           <Link
             className="
-            w-full
+            w-full bg-transparent
             flex justify-start items-center gap-2 p-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors
             "
             href={Paths.DASHBOARD}
@@ -62,7 +62,7 @@ export default function Navbar({ session }: { session: Session | null }) {
               href={Paths.HOME}
               className={cn(
                 navigationMenuTriggerStyle(),
-                "flex items-center gap-2"
+                "flex items-center gap-2 bg-transparent"
               )}
             >
               <Home className="h-4 w-4" />
@@ -76,7 +76,7 @@ export default function Navbar({ session }: { session: Session | null }) {
                   href={Paths.DASHBOARD}
                   className={cn(
                     navigationMenuTriggerStyle(),
-                    "flex items-center gap-2"
+                    "flex items-center gap-2 bg-transparent"
                   )}
                 >
                   <Pencil className="h-4 w-4" />
@@ -88,7 +88,7 @@ export default function Navbar({ session }: { session: Session | null }) {
                   href={Paths.NEW}
                   className={cn(
                     navigationMenuTriggerStyle(),
-                    "flex items-center gap-2"
+                    "flex items-center gap-2 bg-transparent"
                   )}
                 >
                   <PlusCircle className="h-4 w-4" />

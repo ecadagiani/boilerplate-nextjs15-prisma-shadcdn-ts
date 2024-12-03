@@ -1,5 +1,5 @@
-import prisma from "@/lib/db";
-import { PostWithRelations, PostWithRelationsAndExcerpt } from "@/types/posts";
+import prisma from "@/lib/prisma";
+import { PostWithRelations, PostWithRelationsAndExcerpt } from "@/lib/types/posts";
 import { ensureServer } from "@/utils/ensureRuntime";
 import { excerptFromMarkdown } from "@/utils/string";
 import BPromise from "bluebird";
@@ -12,7 +12,7 @@ export async function getPosts({
   userId?: string | null;
   published?: boolean | null;
   sortOrder?: 'asc' | 'desc';
-}): Promise<PostWithRelations[]> {
+}): Promise<PostWithRelationsAndExcerpt[]> {
   ensureServer('services/getPosts');
   const posts = await prisma.post.findMany({
     where: { 
@@ -38,7 +38,10 @@ export async function getPosts({
     take: 20,
   });
 
-  return posts;
+  return BPromise.map(posts, async (post: PostWithRelations) => ({
+    ...post,
+    excerpt: await excerptFromMarkdown(post.content, 80),
+  }));
 }
 
 export async function getPost(slug: string): Promise<PostWithRelations | null> {
@@ -58,10 +61,3 @@ export async function getPost(slug: string): Promise<PostWithRelations | null> {
   return post;
 }
 
-
-export async function addPostsExcerpt(posts: PostWithRelations[]): Promise<PostWithRelationsAndExcerpt[]> {
-  return BPromise.map(posts, async (post: PostWithRelations) => ({
-    ...post,
-    excerpt: await excerptFromMarkdown(post.content, 80),
-  }));
-}

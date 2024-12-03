@@ -1,8 +1,10 @@
 'use client';
 
+import DefaultLayout, { defaultTitleClassName } from '@/components/DefaultLayout';
 import PostsList from '@/components/PostsList';
+import type { SortOrder } from '@/lib/types/api';
 import { queryPosts } from '@/query/post';
-import type { SortOrder } from '@/types/api';
+import { cn } from '@/utils/shadcn';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -16,13 +18,17 @@ export default function Home() {
 
 
   return (
-    <PostsList
+    <DefaultLayout
       title="Welcome to my Blog"
+      titleClassName={cn("text-center", defaultTitleClassName)}
       description="Explore my thoughts, ideas, and insights about technology, development, and beer making."
-      onSortChange={setSortOrder}
-      sortOrder={sortOrder}
-      posts={posts}
-      isLoading={isLoading}
-    />
+    >
+      <PostsList
+        onSortChange={setSortOrder}
+        sortOrder={sortOrder}
+        posts={posts}
+        isLoading={isLoading}
+      />
+    </DefaultLayout>
   );
 }

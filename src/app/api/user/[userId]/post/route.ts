@@ -1,7 +1,7 @@
 import apiWithAuth from '@/lib/apiWithAuth';
-import prisma from '@/lib/db';
-import type { AppRouteHandlerFnContext, NextAuthRequest } from '@/types/api';
-import type { PostWithRelations } from '@/types/posts';
+import prisma from '@/lib/prisma';
+import type { AppRouteHandlerFnContext, NextAuthRequest } from '@/lib/types/api';
+import type { PostWithRelations } from '@/lib/types/posts';
 import { NextResponse } from 'next/server';
 
 export interface UserPostRouteContext extends AppRouteHandlerFnContext {

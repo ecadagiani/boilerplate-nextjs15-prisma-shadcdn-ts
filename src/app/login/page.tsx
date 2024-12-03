@@ -2,6 +2,7 @@
 
 import { auth } from '@/auth';
 import LoginForm from '@/components/auth/LoginForm';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Paths } from '@/constants/paths';
 import Link from 'next/link';
@@ -27,17 +28,15 @@ export default async function LoginPage() {
         </CardHeader>
         <CardContent>
           <LoginForm />
-          <Link 
-            href={Paths.HOME}
-            className="
-              inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium 
-              transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 
-              bg-white text-black border border-black shadow hover:bg-black hover:text-white h-9 px-4 py-2 
-              w-full mt-2
-              "
+
+          <Button 
+            type="button" 
+            variant="outline"
+            className="border-black shadow hover:bg-black hover:text-white w-full mt-2"
+            asChild
           >
-            Go Back
-          </Link>
+            <Link href={Paths.HOME}>Go Back</Link>
+          </Button>
         </CardContent>
       </Card>
     </main>

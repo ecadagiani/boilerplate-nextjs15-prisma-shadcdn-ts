@@ -12,6 +12,8 @@ export type PostWithRelations = Post & {
   }>;
 };
 
-export type PostWithRelationsAndExcerpt = PostWithRelations & {
+export type PostWithExcerpt = Post & {
   excerpt: string;
 };
+
+export type PostWithRelationsAndExcerpt = PostWithRelations & PostWithExcerpt;

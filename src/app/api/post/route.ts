@@ -1,6 +1,6 @@
 import { internalServerError, jsonData } from '@/lib/apiResponse';
-import { getPosts } from '@/services/post';
-import type { PostWithRelations } from '@/types/posts';
+import { getPosts } from '@/lib/services/post';
+import type { PostWithRelations } from '@/lib/types/posts';
 
 export async function GET(
   request: Request

@@ -1,6 +1,5 @@
-import api from "@/lib/api";
-import { addPostsExcerpt } from "@/services/post";
-import type { PostWithRelationsAndExcerpt } from "@/types/posts";
+import type { PostWithRelationsAndExcerpt } from "@/lib/types/posts";
+import api from "@/query/axios";
 
 export async function queryPosts({
   sortOrder = 'desc',
@@ -9,7 +8,7 @@ export async function queryPosts({
   sortOrder?: 'desc' | 'asc';
   userId?: string | null;
 }): Promise<PostWithRelationsAndExcerpt[]> {
-  const response = await api.get('/post', {
+  const response = await api.get<{ posts: PostWithRelationsAndExcerpt[] }>('/post', {
     params: { sortOrder, userId },
   });
 
@@ -17,7 +16,7 @@ export async function queryPosts({
     throw new Error('Failed to fetch posts');
   }
   
-  return addPostsExcerpt(response.data.posts);
+  return response.data.posts;
 }
 
 export async function queryUserPosts({
@@ -27,7 +26,7 @@ export async function queryUserPosts({
   sortOrder?: 'desc' | 'asc';
   userId?: string | null;
 }): Promise<PostWithRelationsAndExcerpt[]> {
-  const response = await api.get(`/user/${userId}/post`, {
+  const response = await api.get<{ posts: PostWithRelationsAndExcerpt[] }>(`/user/${userId}/post`, {
     params: { sortOrder },
   });
 
@@ -35,5 +34,5 @@ export async function queryUserPosts({
     throw new Error('Failed to fetch posts');
   }
 
-  return addPostsExcerpt(response.data.posts);
+  return response.data.posts;
 }

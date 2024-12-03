@@ -2,9 +2,9 @@
 
 import PostEditorCard, { PostEditorCardSkeleton } from "@/components/PostEditorCard";
 import PostsList from "@/components/PostsList";
+import type { SortOrder } from "@/lib/types/api";
+import type { PostWithRelationsAndExcerpt } from "@/lib/types/posts";
 import { queryUserPosts } from "@/query/post";
-import type { SortOrder } from "@/types/api";
-import type { PostWithRelationsAndExcerpt } from "@/types/posts";
 import { useQuery } from "@tanstack/react-query";
 import { Session } from "next-auth";
 import { useState } from "react";
@@ -36,8 +36,6 @@ export default function UserPostsList({
 
   return (
     <PostsList
-      title="My posts"
-      titleClassName="text-left"
       onSortChange={setSortOrder}
       sortOrder={sortOrder}
       posts={posts}
