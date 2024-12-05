@@ -42,36 +42,36 @@ import { redirect } from "next/navigation";
  * ```
  */
 export interface AccessControlProps {
-  children: React.ReactNode;
-  roles?: Role[] | Role | null;
-  fallback?: React.ReactNode | null;
-  redirectTo?: string;
-  redirectToForbidden?: string | null;
-  withCallbackUrl?: boolean;
-  withCallbackUrlForbidden?: boolean;
+  children: React.ReactNode
+  roles?: Role[] | Role | null
+  fallback?: React.ReactNode | null
+  redirectTo?: string
+  redirectToForbidden?: string | null
+  withCallbackUrl?: boolean
+  withCallbackUrlForbidden?: boolean
 }
 
-export default async function AccessControl ({
+export default async function AccessControl({
   children,
-  roles=null,
-  fallback=null,
-  redirectTo=Paths.LOGIN,
-  redirectToForbidden=Paths.HOME,
-  withCallbackUrl=true,
-  withCallbackUrlForbidden=false,
+  roles = null,
+  fallback = null,
+  redirectTo = Paths.LOGIN,
+  redirectToForbidden = Paths.HOME,
+  withCallbackUrl = true,
+  withCallbackUrlForbidden = false,
 }: AccessControlProps): Promise<Awaited<JSX.Element>> {
   const session = await auth();
   const headerList = await headers();
   const currentPath = headerList.get("x-current-path");
 
-  if(!session){
+  if (!session) {
     return fallback as JSX.Element || redirect(redirectTo + (withCallbackUrl ? `?callbackUrl=${currentPath}` : ""));
   }
 
-  if(roles){
+  if (roles) {
     const roleList = Array.isArray(roles) ? roles : [roles];
-    if(!roleList.includes(session.user.role)){
-      const redirectUrl = (redirectToForbidden || redirectTo)+ (withCallbackUrlForbidden ? `?callbackUrl=${currentPath}` : "");
+    if (!roleList.includes(session.user.role)) {
+      const redirectUrl = (redirectToForbidden || redirectTo) + (withCallbackUrlForbidden ? `?callbackUrl=${currentPath}` : "");
       return fallback as JSX.Element || redirect(redirectUrl);
     }
   }

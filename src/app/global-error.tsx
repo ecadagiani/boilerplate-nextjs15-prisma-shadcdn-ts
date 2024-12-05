@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }) {
   return (
     <html>
@@ -15,7 +15,7 @@ export default function GlobalError({
             <h2 className="text-4xl font-bold tracking-tight">Oops!</h2>
             <p className="text-muted-foreground">Something went wrong</p>
           </div>
-          
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-border"></div>
@@ -43,4 +43,4 @@ export default function GlobalError({
       </body>
     </html>
   );
-} 
+}

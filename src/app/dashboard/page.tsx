@@ -6,9 +6,9 @@ import type { Session } from "next-auth";
 import UserPostsList from "./UserPostsList";
 
 export default async function DashboardPage() {
-  const session= await auth() as Session;
-  const initialSortOrder: SortOrder = 'desc';
-  const userPosts = await getPosts({userId: session?.user.id, sortOrder: initialSortOrder});
+  const session = await auth() as Session;
+  const initialSortOrder: SortOrder = "desc";
+  const userPosts = await getPosts({ userId: session?.user.id, sortOrder: initialSortOrder });
 
   return (
     <DefaultLayout

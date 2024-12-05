@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { deletePostAction } from "@/actions/post";
 import type { PostEditorCardProps } from "@/components/PostEditorCard";
@@ -12,13 +12,13 @@ import { Session } from "next-auth";
 import { useCallback, useMemo, useState } from "react";
 
 export interface DashboardPostsPageProps {
-  initialPosts: PostWithRelationsAndExcerpt[];
-  initialSortOrder: SortOrder;
-  session: Session;
+  initialPosts: PostWithRelationsAndExcerpt[]
+  initialSortOrder: SortOrder
+  session: Session
 }
 
 interface DashboardPostCardProps extends PostEditorCardProps {
-  updateList: (postId: string) => void;
+  updateList: (postId: string) => void
 }
 
 function DashboardPostCard({
@@ -31,20 +31,20 @@ function DashboardPostCard({
 export default function UserPostsList({
   initialPosts,
   initialSortOrder,
-  session
+  session,
 }: DashboardPostsPageProps) {
   const queryClient = useQueryClient();
   const [sortOrder, setSortOrder] = useState<SortOrder>(initialSortOrder);
   const { data: posts, isLoading } = useQuery({
-    queryKey: ['posts', sortOrder, session.user.id],
-    queryFn: () => queryUserPosts({sortOrder, userId: session.user.id}),
+    queryKey: ["posts", sortOrder, session.user.id],
+    queryFn: () => queryUserPosts({ sortOrder, userId: session.user.id }),
     initialData: initialPosts,
   });
 
   const removePost = useCallback((postId: string) => {
     queryClient.setQueryData(
-      ['posts', sortOrder, session.user.id],
-      posts.filter((post) => post.id !== postId)
+      ["posts", sortOrder, session.user.id],
+      posts.filter(post => post.id !== postId),
     );
   }, [posts, sortOrder, session.user.id, queryClient]);
 

@@ -24,11 +24,10 @@ declare module "next-auth" {
       id: string
     } & DefaultSession["user"]
   }
-  interface User  {
+  interface User {
     role?: Role
   }
 }
- 
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -40,19 +39,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        try{
+        try {
           const parsedCredentials = z
             .object({ email: z.string().email(), password: z.string().min(6) })
             .safeParse(credentials);
-          
+
           if (parsedCredentials.success) {
             const { email, password } = parsedCredentials.data;
             const user = await prisma.user.findUnique({
               where: { email },
-            }); 
+            });
             if (!user) return null;
             const passwordsMatch = await bcrypt.compare(password, user.password);
 
@@ -61,11 +60,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             }
           }
           return null;
-        } catch(error) {
+        }
+        catch (error) {
           console.error("providers Credentials authorize error", error);
           return null;
         }
       },
-    })
-  ]
-})
+    }),
+  ],
+});

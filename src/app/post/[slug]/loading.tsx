@@ -1,6 +1,6 @@
-import DefaultLayout from '@/components/DefaultLayout';
-import { PostContentSkeleton } from '@/components/PostContent';
-import { Skeleton } from '@/components/ui/skeleton';
+import DefaultLayout from "@/components/DefaultLayout";
+import { PostContentSkeleton } from "@/components/PostContent";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PostPageLoading() {
   return (
@@ -11,4 +11,4 @@ export default function PostPageLoading() {
       <PostContentSkeleton />
     </DefaultLayout>
   );
-} 
+}

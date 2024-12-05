@@ -25,8 +25,8 @@ export default async function RootLayout({
   breadcrumb,
   children,
 }: Readonly<{
-  breadcrumb: React.ReactNode;
-  children: React.ReactNode;
+  breadcrumb: React.ReactNode
+  children: React.ReactNode
 }>) {
   const session = await auth();
   return (

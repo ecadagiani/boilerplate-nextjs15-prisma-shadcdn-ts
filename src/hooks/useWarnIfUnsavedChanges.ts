@@ -1,10 +1,9 @@
-import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 // because nextJS doesn't trigger the beforeunload event on anchor clicks, we need to add listeners manually
 // from https://github.com/vercel/next.js/discussions/50700#discussioncomment-10134248
-
 
 export const useWarnIfUnsavedChanges = (unsaved: boolean) => {
   const router = useRouter();
@@ -21,8 +20,8 @@ export const useWarnIfUnsavedChanges = (unsaved: boolean) => {
   };
 
   const addAnchorListeners = () => {
-    const anchorElements = document.querySelectorAll('a[href]');
-    anchorElements.forEach((anchor) => anchor.addEventListener('click', handleAnchorClick));
+    const anchorElements = document.querySelectorAll("a[href]");
+    anchorElements.forEach(anchor => anchor.addEventListener("click", handleAnchorClick));
   };
 
   useEffect(() => {
@@ -32,40 +31,41 @@ export const useWarnIfUnsavedChanges = (unsaved: boolean) => {
 
     return () => {
       mutationObserver.disconnect();
-      const anchorElements = document.querySelectorAll('a[href]');
-      anchorElements.forEach((anchor) => anchor.removeEventListener('click', handleAnchorClick));
+      const anchorElements = document.querySelectorAll("a[href]");
+      anchorElements.forEach(anchor => anchor.removeEventListener("click", handleAnchorClick));
     };
   }, []);
 
   useEffect(() => {
     const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      e.returnValue = ''; // required for Chrome
+      e.returnValue = ""; // required for Chrome
     };
 
     const handlePopState = (e: PopStateEvent) => {
       if (unsaved) {
         const confirmLeave = window.confirm(
-          'You have unsaved changes. Are you sure you want to leave?',
+          "You have unsaved changes. Are you sure you want to leave?",
         );
         if (!confirmLeave) {
           e.preventDefault();
-          window.history.pushState(null, '', window.location.href);
+          window.history.pushState(null, "", window.location.href);
         }
       }
     };
 
     if (unsaved) {
-      window.addEventListener('beforeunload', beforeUnloadHandler);
-      window.addEventListener('popstate', handlePopState);
-    } else {
-      window.removeEventListener('beforeunload', beforeUnloadHandler);
-      window.removeEventListener('popstate', handlePopState);
+      window.addEventListener("beforeunload", beforeUnloadHandler);
+      window.addEventListener("popstate", handlePopState);
+    }
+    else {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      window.removeEventListener("popstate", handlePopState);
     }
 
     return () => {
-      window.removeEventListener('beforeunload', beforeUnloadHandler);
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, [unsaved]);
 
@@ -75,10 +75,11 @@ export const useWarnIfUnsavedChanges = (unsaved: boolean) => {
     router.push = (url: string, options?: NavigateOptions) => {
       if (unsaved) {
         const confirmLeave = window.confirm(
-          'You have unsaved changes. Are you sure you want to leave?',
+          "You have unsaved changes. Are you sure you want to leave?",
         );
         if (confirmLeave) originalPush(url, options);
-      } else {
+      }
+      else {
         originalPush(url, options);
       }
     };

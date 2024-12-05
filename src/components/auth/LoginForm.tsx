@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import type { LoginResult } from '@/actions/auth';
-import { login } from '@/actions/auth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Paths } from '@/constants/paths';
-import { Loader2 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { useActionState, useMemo } from 'react';
+import type { LoginResult } from "@/actions/auth";
+import { login } from "@/actions/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Paths } from "@/constants/paths";
+import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useActionState, useMemo } from "react";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const redirectTo = useMemo(() => searchParams.get('callbackUrl') ?? Paths.HOME, [searchParams]);
+  const redirectTo = useMemo(() => searchParams.get("callbackUrl") ?? Paths.HOME, [searchParams]);
 
   const [loginState, formAction, isPending] = useActionState<LoginResult, FormData>(
     login,
-    {ok: false},
+    { ok: false },
   );
 
   return (
@@ -53,14 +53,16 @@ export default function LoginForm() {
         </div>
       )}
       <Button className="w-full mt-2" type="submit" disabled={isPending}>
-        {isPending ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Please wait
-          </>
-        ) : (
-          'Login'
-        )}
+        {isPending
+          ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </>
+          )
+          : (
+            "Login"
+          )}
       </Button>
     </form>
   );

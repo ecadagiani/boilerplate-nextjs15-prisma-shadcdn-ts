@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import { Paths } from "@/constants/paths";
-import { isProtectedRoute } from '@/utils/route';
-import { Loader2, LogOut } from 'lucide-react';
+import { isProtectedRoute } from "@/utils/route";
+import { Loader2, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function LogoutButton() {
   const pathname = usePathname();
@@ -16,7 +16,7 @@ export default function LogoutButton() {
     setIsPending(true);
     const redirectTo = isProtectedRoute(pathname) ? Paths.HOME : pathname;
     signOut({
-      redirectTo
+      redirectTo,
     });
     // do not set isPending to false, because the page will reload
   };
@@ -31,10 +31,12 @@ export default function LogoutButton() {
       onClick={handleLogout}
       disabled={isPending}
     >
-      {isPending ? (
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      ) :(
-        <LogOut className="h-4 w-4" />)}
+      {isPending
+        ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        )
+        : (
+          <LogOut className="h-4 w-4" />)}
       Logout
     </Button>
   );

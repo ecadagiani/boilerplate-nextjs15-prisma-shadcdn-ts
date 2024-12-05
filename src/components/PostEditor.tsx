@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { ActionPostResult } from '@/actions/post';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { ActionPostResult } from "@/actions/post";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -12,32 +12,32 @@ import {
   FormLabel,
   FormMessage,
   FormRootError,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Textarea } from '@/components/ui/textarea';
-import { Paths } from '@/constants/paths';
-import { useWarnIfUnsavedChanges } from '@/hooks/useWarnIfUnsavedChanges';
-import { PostWithRelations } from '@/lib/types/posts';
-import { postSchema } from '@/lib/validation/post';
-import { slugify } from '@/utils/string';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useTransition } from 'react';
-import type { FormState } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { MultiSelect } from './ui/multi-select';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { Paths } from "@/constants/paths";
+import { useWarnIfUnsavedChanges } from "@/hooks/useWarnIfUnsavedChanges";
+import { PostWithRelations } from "@/lib/types/posts";
+import { postSchema } from "@/lib/validation/post";
+import { slugify } from "@/utils/string";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useTransition } from "react";
+import type { FormState } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { MultiSelect } from "./ui/multi-select";
 
-type PostSchemaInfer = z.infer<typeof postSchema>
+type PostSchemaInfer = z.infer<typeof postSchema>;
 
 export interface PostEditorProps {
   action: (data: FormData) => Promise<ActionPostResult>
   post?: PostWithRelations
   submitText?: string
-  categories?: {value: string, label: string}[]
+  categories?: { value: string, label: string }[]
   redirectToPreview?: boolean
 }
 
@@ -47,7 +47,7 @@ export interface SubmitButtonProps {
   submitText?: string
 }
 
-function SubmitButton({ formState, isPending=false, submitText = 'Save' }: SubmitButtonProps) {
+function SubmitButton({ formState, isPending = false, submitText = "Save" }: SubmitButtonProps) {
   return (
     <Button
       type="submit"
@@ -61,20 +61,22 @@ function SubmitButton({ formState, isPending=false, submitText = 'Save' }: Submi
         disabled:opacity-50
       "
     >
-      {isPending ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Saving...
-        </>
-      ) : (
-        submitText
-      )}
+      {isPending
+        ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Saving...
+          </>
+        )
+        : (
+          submitText
+        )}
     </Button>
   );
 }
 
 export default function PostEditor({
-  action, post, submitText, categories, redirectToPreview = true
+  action, post, submitText, categories, redirectToPreview = true,
 }: PostEditorProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -82,24 +84,24 @@ export default function PostEditor({
   const form = useForm<PostSchemaInfer>({
     resolver: zodResolver(postSchema),
     defaultValues: {
-      title: post?.title || '',
-      slug: post?.slug || '',
-      content: post?.content || '',
+      title: post?.title || "",
+      slug: post?.slug || "",
+      content: post?.content || "",
     },
     mode: "onChange",
-    delayError: 500
+    delayError: 500,
   });
 
   // auto-generate slug from title
-  const title = form.watch('title');
+  const title = form.watch("title");
   const previousTitle = useRef(title);
   useEffect(() => {
-    if(!previousTitle.current && !title) return; // avoid form.setValue on initial render
+    if (!previousTitle.current && !title) return; // avoid form.setValue on initial render
 
-    const currentSlug = form.getValues('slug');
+    const currentSlug = form.getValues("slug");
     const slugifiedPreviousTitle = slugify(previousTitle.current);
     if (!currentSlug || currentSlug === slugifiedPreviousTitle) {
-      form.setValue('slug', slugify(title), {
+      form.setValue("slug", slugify(title), {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -123,13 +125,14 @@ export default function PostEditor({
 
     startTransition(async () => {
       const result = await action(formData);
-      if (redirectToPreview && result.ok && result.post){
+      if (redirectToPreview && result.ok && result.post) {
         router.push(Paths.PREVIEW(result.post.slug));
       }
       if (result.errors) {
-        if(typeof result.errors === 'string') {
-          form.setError('root', { message: result.errors });
-        } else {
+        if (typeof result.errors === "string") {
+          form.setError("root", { message: result.errors });
+        }
+        else {
           result.errors.forEach((error) => {
             form.setError(error.path, { message: error.message });
           });

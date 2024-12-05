@@ -12,7 +12,7 @@ export default async function NewPostPage() {
       <PostEditor
         action={createPostAction}
         submitText="Create"
-        categories={categories.map((c) => ({value: c.id, label: c.name}))}
+        categories={categories.map(c => ({ value: c.id, label: c.name }))}
       />
     </DefaultLayout>
   );

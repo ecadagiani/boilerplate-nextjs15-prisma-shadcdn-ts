@@ -1,12 +1,16 @@
+import DefaultLayout from "@/components/DefaultLayout";
 import { PostEditorCardSkeleton } from "@/components/PostEditorCard";
 import PostsList from "@/components/PostsList";
 
 export default function DashboardLoadingPage() {
   return (
-    <PostsList
+    <DefaultLayout
       title="My posts"
-      isLoading={true}
-      PostCardSkeletonComponent={PostEditorCardSkeleton}
-    />
+    >
+      <PostsList
+        isLoading={true}
+        PostCardSkeletonComponent={PostEditorCardSkeleton}
+      />
+    </DefaultLayout>
   );
 }
