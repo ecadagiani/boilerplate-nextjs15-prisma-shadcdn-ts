@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Paths } from "@/constants/paths";
 import { cn } from "@/utils/shadcn";
-import { Home, Pencil, PlusCircle, User } from "lucide-react";
+import {
+  Home, Pencil, PlusCircle, User
+} from "lucide-react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 
-const UserNavigation = () => {
-  
+function UserNavigation() {
   return (
     <ul className="grid w-[200px] gap-2 p-4">
       <li>
@@ -40,25 +41,30 @@ const UserNavigation = () => {
       </li>
     </ul>
   );
-};
+}
 
-export default function Navbar({ session }: { session: Session | null }) {
+export interface NavbarProps {
+  session: Session | null
+}
+
+export default function Navbar({ session }: NavbarProps) {
   const status = session ? 'authenticated' : 'unauthenticated';
   const sessionData = session;
   // const { data: sessionData, status } = useSession();
   return (
     <header className="
       sticky
-      top-0 z-50 w-full px-6 py-4 
+      top-0 z-50 w-full px-6 py-4
       bg-white/75 dark:bg-zinc-950/75
       border-b border-zinc-200 dark:border-zinc-800
       backdrop-blur supports-[backdrop-filter]:bg-background/60
       flex justify-between items-center
-    ">
-      <NavigationMenu >
+    "
+    >
+      <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link 
+            <Link
               href={Paths.HOME}
               className={cn(
                 navigationMenuTriggerStyle(),
@@ -122,5 +128,5 @@ export default function Navbar({ session }: { session: Session | null }) {
         <NavigationMenuViewport right />
       </NavigationMenu>
     </header>
-  )
+  );
 }

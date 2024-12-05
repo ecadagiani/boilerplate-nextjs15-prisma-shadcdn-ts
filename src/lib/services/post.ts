@@ -15,9 +15,12 @@ export async function getPosts({
 }): Promise<PostWithRelationsAndExcerpt[]> {
   ensureServer('services/getPosts');
   const posts = await prisma.post.findMany({
-    where: { 
+    where: {
       ...(userId ? { authorId: userId } : {}),
-      ...(published !== null ? published ? { published: { not: null } } : { published: null } : {}),
+      ...(() => {
+        if (published === null) return {};
+        return published ? { published: { not: null } } : { published: null };
+      })(),
     },
     include: {
       author: {
@@ -44,10 +47,16 @@ export async function getPosts({
   }));
 }
 
-export async function getPost(slug: string): Promise<PostWithRelations | null> {
+export async function getPost({
+  slug,
+  id,
+}: {
+  slug?: string;
+  id?: string;
+}): Promise<PostWithRelations | null> {
   ensureServer('services/getPost');
   const post = await prisma.post.findUnique({
-    where: { slug },
+    where: { ...(slug ? { slug } : { id }) },
     include: {
       author: true,
       categories: {
@@ -61,3 +70,40 @@ export async function getPost(slug: string): Promise<PostWithRelations | null> {
   return post;
 }
 
+export async function createPost({
+  authorId,
+  title,
+  slug,
+  content,
+  categories,
+}: {
+  authorId: string;
+  title: string;
+  slug: string;
+  content: string;
+  categories: string[] | undefined;
+}) {
+  ensureServer('services/createPost');
+
+  const result = await prisma.post.create({
+    data: {
+      authorId,
+      title,
+      slug,
+      content,
+      categories: {
+        create: categories?.map((categoryId) => ({
+          category: {
+            connect: { id: categoryId }
+          }
+        })),
+      },
+    },
+  });
+  return result;
+}
+
+export async function deletePost(id: string) {
+  ensureServer('services/deletePost');
+  return prisma.post.delete({ where: { id } });
+}

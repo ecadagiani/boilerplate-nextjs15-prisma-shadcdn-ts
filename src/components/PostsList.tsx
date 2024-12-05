@@ -1,31 +1,34 @@
 import PostCard, { PostCardSkeleton } from '@/components/PostCard';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from '@/components/ui/select';
 import { SortOrder } from '@/lib/types/api';
 import type { PostWithRelationsAndExcerpt } from '@/lib/types/posts';
 
-export type PostsListProps = {
+export interface PostsListProps<TAdditionalPostCardProps extends Record<string, unknown>> {
   onSortChange?: (sortOrder: SortOrder) => void;
   sortOrder?: SortOrder;
   posts?: PostWithRelationsAndExcerpt[];
   isLoading?: boolean;
-  PostCardComponent?: React.ComponentType<PostWithRelationsAndExcerpt>;
+  PostCardComponent?: React.ComponentType<PostWithRelationsAndExcerpt & TAdditionalPostCardProps>;
   PostCardSkeletonComponent?: React.ComponentType;
+  additionalPostCardProps?: TAdditionalPostCardProps;
 }
 
-export default function PostsList({
+export default function PostsList<TAdditionalPostCardProps extends Record<string, unknown>>({
   onSortChange,
   sortOrder,
   posts,
   isLoading,
   PostCardComponent = PostCard,
   PostCardSkeletonComponent = PostCardSkeleton,
-}: PostsListProps) {
-
+  additionalPostCardProps,
+}: PostsListProps<TAdditionalPostCardProps>) {
   return (
     <>
       {/* Sort Control */}
       {onSortChange && (
-        <div className="flex justify-end max-w-4xl mx-auto">
+        <div className="flex justify-end max-w-4xl mx-auto pb-4">
           <Select
             value={sortOrder}
             onValueChange={(value: SortOrder) => onSortChange(value)}
@@ -40,7 +43,7 @@ export default function PostsList({
           </Select>
         </div>
       )}
-        
+
       {/* Posts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isLoading ? (
@@ -52,7 +55,7 @@ export default function PostsList({
         ) : (
           posts?.map((post) => (
             <div key={post.id} className="transform transition-all hover:-translate-y-1">
-              <PostCardComponent key={post.id} {...post} />
+              <PostCardComponent {...additionalPostCardProps} {...post} />
             </div>
           ))
         )}

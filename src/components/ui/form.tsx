@@ -1,8 +1,8 @@
 "use client"
 
-import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
+import * as React from "react"
 import {
   Controller,
   ControllerProps,
@@ -12,8 +12,8 @@ import {
   useFormContext,
 } from "react-hook-form"
 
-import { cn } from "@/utils/shadcn"
 import { Label } from "@/components/ui/label"
+import { cn } from "@/utils/shadcn"
 
 const Form = FormProvider
 
@@ -32,8 +32,8 @@ const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
+    ...props
+  }: ControllerProps<TFieldValues, TName>) => {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
@@ -165,14 +165,39 @@ const FormMessage = React.forwardRef<
   )
 })
 FormMessage.displayName = "FormMessage"
+const FormRootError = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement> & { align?: 'left' | 'right' }
+>(({ className, align = 'left', ...props }, ref) => {
+  const { formState } = useFormContext()
+  const rootError = formState.errors.root?.message
+
+  if (!rootError) {
+    return null
+  }
+
+  return (
+    <p
+      ref={ref}
+      className={cn(
+        "text-sm font-medium text-zinc-900 dark:text-white bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-4 rounded-lg shadow-sm transition-colors duration-200",
+        {
+          'text-left': align === 'left',
+          'text-right': align === 'right'
+        },
+        className
+      )}
+      {...props}
+    >
+      {rootError}
+    </p>
+  )
+})
+FormRootError.displayName = "FormRootError"
 
 export {
-  useFormField,
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
+  Form, FormControl,
+  FormDescription, FormField, FormItem,
+  FormLabel, FormMessage, FormRootError, useFormField
 }
+

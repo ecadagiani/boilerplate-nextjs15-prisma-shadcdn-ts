@@ -9,7 +9,7 @@ import {
 import Link from 'next/link';
 import React from 'react';
 
-type BreadcrumbComponentProps = {
+export interface BreadcrumbComponentProps {
   items: Array<{
     label: string;
     href?: string;
@@ -25,15 +25,17 @@ export default function BreadcrumbComponent({ items, current }: BreadcrumbCompon
         {items.map((item, index) => (
           <React.Fragment key={index}>
             <BreadcrumbItem>
-              {item.component ? item.component : (
-                item.href ? (
+              {(() => {
+                if (item.component) return item.component;
+                if (item.href) {
+                  return (
                     <BreadcrumbLink asChild>
-                    <Link href={item.href}>{item.label}</Link>
-                  </BreadcrumbLink>
-                ) : (
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                )
-              )}
+                      <Link href={item.href}>{item.label}</Link>
+                    </BreadcrumbLink>
+                  );
+                }
+                return <BreadcrumbPage>{item.label}</BreadcrumbPage>;
+              })()}
             </BreadcrumbItem>
             {index < items.length - 1 && <BreadcrumbSeparator />}
           </React.Fragment>
@@ -49,4 +51,4 @@ export default function BreadcrumbComponent({ items, current }: BreadcrumbCompon
       </BreadcrumbList>
     </Breadcrumb>
   );
-} 
+}

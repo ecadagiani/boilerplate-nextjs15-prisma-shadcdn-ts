@@ -6,32 +6,32 @@ import { redirect } from "next/navigation";
 
 /**
  * AccessControl - A component for handling role-based access control in Next.js applications
- * 
+ *
  * @remarks
  * While this component can be used to protect specific views or components, it's recommended
  * to implement access control at the middleware level when possible for better performance
  * and security.
- * 
+ *
  * @example
  * ```tsx
  * // Basic usage - only allows authenticated users
  * <AccessControl>
  *   <ProtectedComponent />
  * </AccessControl>
- * 
+ *
  * // Restrict to specific roles
  * <AccessControl roles={[Role.ADMIN, Role.MODERATOR]}>
  *   <AdminPanel />
  * </AccessControl>
- * 
+ *
  * // Custom component fallback for unauthorized access
  * <AccessControl roles={Role.ADMIN} fallback={<UnauthorizedMessage />}>
  *   <AdminPanel />
  * </AccessControl>
- * 
+ *
  * // Custom redirect for unauthorized access
- * <AccessControl 
- *   roles={Role.ADMIN} 
+ * <AccessControl
+ *   roles={Role.ADMIN}
  *   redirectTo="/login"
  *   redirectToForbidden="/forbidden"
  *   withCallbackUrl={true}
@@ -41,7 +41,7 @@ import { redirect } from "next/navigation";
  * </AccessControl>
  * ```
  */
-export type AccessControlProps = {
+export interface AccessControlProps {
   children: React.ReactNode;
   roles?: Role[] | Role | null;
   fallback?: React.ReactNode | null;
@@ -71,7 +71,7 @@ export default async function AccessControl ({
   if(roles){
     const roleList = Array.isArray(roles) ? roles : [roles];
     if(!roleList.includes(session.user.role)){
-      const redirectUrl = (redirectToForbidden || redirectTo )+ (withCallbackUrlForbidden ? `?callbackUrl=${currentPath}` : "")
+      const redirectUrl = (redirectToForbidden || redirectTo)+ (withCallbackUrlForbidden ? `?callbackUrl=${currentPath}` : "");
       return fallback as JSX.Element || redirect(redirectUrl);
     }
   }

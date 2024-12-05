@@ -1,10 +1,9 @@
 import { auth } from "@/auth";
 import Navbar from "@/components/Navbar";
-import { ReactQueryProvider } from "@/components/providers/ReactQueryProvider";
+import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-
 
 const geistSans = localFont({
   src: "../../public/fonts/GeistVF.woff",

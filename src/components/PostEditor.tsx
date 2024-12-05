@@ -11,10 +11,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
+import { Paths } from '@/constants/paths';
 import { useWarnIfUnsavedChanges } from '@/hooks/useWarnIfUnsavedChanges';
 import { PostWithRelations } from '@/lib/types/posts';
 import { postSchema } from '@/lib/validation/post';
@@ -22,6 +24,7 @@ import { slugify } from '@/utils/string';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useTransition } from 'react';
 import type { FormState } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
@@ -30,15 +33,15 @@ import { MultiSelect } from './ui/multi-select';
 
 type PostSchemaInfer = z.infer<typeof postSchema>
 
-
-type PostEditorProps = {
+export interface PostEditorProps {
   action: (data: FormData) => Promise<ActionPostResult>
   post?: PostWithRelations
   submitText?: string
   categories?: {value: string, label: string}[]
+  redirectToPreview?: boolean
 }
 
-type SubmitButtonProps = {
+export interface SubmitButtonProps {
   formState: FormState<PostSchemaInfer>
   isPending: boolean
   submitText?: string
@@ -46,12 +49,12 @@ type SubmitButtonProps = {
 
 function SubmitButton({ formState, isPending=false, submitText = 'Save' }: SubmitButtonProps) {
   return (
-    <Button 
-      type="submit" 
+    <Button
+      type="submit"
       disabled={!formState.isDirty || !formState.isValid}
       className="
         rounded-lg
-        bg-zinc-900 dark:bg-white 
+        bg-zinc-900 dark:bg-white
         text-white dark:text-zinc-900
         hover:bg-zinc-800 dark:hover:bg-zinc-100
         transition-all duration-200
@@ -67,11 +70,14 @@ function SubmitButton({ formState, isPending=false, submitText = 'Save' }: Submi
         submitText
       )}
     </Button>
-  )
+  );
 }
 
-export default function PostEditor({action, post, submitText, categories }: PostEditorProps) {
-  const [isPending, startTransition] = useTransition()
+export default function PostEditor({
+  action, post, submitText, categories, redirectToPreview = true
+}: PostEditorProps) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<PostSchemaInfer>({
     resolver: zodResolver(postSchema),
@@ -98,13 +104,12 @@ export default function PostEditor({action, post, submitText, categories }: Post
         shouldDirty: true,
       });
     }
-    
+
     previousTitle.current = title;
   }, [title, form]);
 
   // warn if there are unsaved changes
   useWarnIfUnsavedChanges(form.formState.isDirty);
-
 
   // submit form data to action
   async function onSubmit(data: PostSchemaInfer) {
@@ -118,7 +123,9 @@ export default function PostEditor({action, post, submitText, categories }: Post
 
     startTransition(async () => {
       const result = await action(formData);
-      if (result.ok) return; // todo redirect to preview
+      if (redirectToPreview && result.ok && result.post){
+        router.push(Paths.PREVIEW(result.post.slug));
+      }
       if (result.errors) {
         if(typeof result.errors === 'string') {
           form.setError('root', { message: result.errors });
@@ -143,11 +150,11 @@ export default function PostEditor({action, post, submitText, categories }: Post
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel aria-required>Title*</FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       placeholder="Enter post title"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -160,16 +167,16 @@ export default function PostEditor({action, post, submitText, categories }: Post
               name="slug"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Slug</FormLabel>
+                  <FormLabel aria-required>Slug*</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="enter-post-slug" 
+                    <Input
+                      placeholder="enter-post-slug"
                       className="font-mono text-sm"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription >
-                      The URL-friendly version of the title
+                  <FormDescription>
+                    The URL-friendly version of the title
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -197,8 +204,8 @@ export default function PostEditor({action, post, submitText, categories }: Post
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel >
-                      Content (Markdown)
+                  <FormLabel aria-required>
+                    Content (Markdown)*
                   </FormLabel>
                   <FormControl>
                     <Textarea
@@ -212,9 +219,10 @@ export default function PostEditor({action, post, submitText, categories }: Post
               )}
             />
 
+            <FormRootError className="mt-4" align="right" />
             <div className="flex justify-end gap-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant="outline"
                 asChild
               >
@@ -229,8 +237,6 @@ export default function PostEditor({action, post, submitText, categories }: Post
   );
 }
 
-
-
 export function PostEditorSkeleton() {
   return (
     <div className="max-w-4xl mx-auto">
@@ -241,30 +247,40 @@ export function PostEditorSkeleton() {
           border border-zinc-200 dark:border-zinc-800
           rounded-xl
           shadow-lg dark:shadow-zinc-950/50
-        ">
+        "
+        >
           {/* Title Field */}
           <div className="space-y-2">
-            <Skeleton className="h-4 w-16" /> {/* Label */}
-            <Skeleton className="h-9 w-full" /> {/* Input */}
+            {/* Label */}
+            <Skeleton className="h-4 w-16" />
+            {/* Input */}
+            <Skeleton className="h-9 w-full" />
           </div>
 
           {/* Slug Field */}
           <div className="space-y-2">
-            <Skeleton className="h-4 w-16" /> {/* Label */}
-            <Skeleton className="h-9 w-full" /> {/* Input */}
-            <Skeleton className="h-4 w-48" /> {/* Description */}
+            {/* Label */}
+            <Skeleton className="h-4 w-16" />
+            {/* Input */}
+            <Skeleton className="h-9 w-full" />
+            {/* Description */}
+            <Skeleton className="h-4 w-48" />
           </div>
 
           {/* Content Field */}
           <div className="space-y-2">
-            <Skeleton className="h-4 w-32" /> {/* Label */}
-            <Skeleton className="h-[150px] w-full" /> {/* Textarea */}
+            {/* Label */}
+            <Skeleton className="h-4 w-32" />
+            {/* Textarea */}
+            <Skeleton className="h-[150px] w-full" />
           </div>
 
           {/* Actions */}
           <div className="flex justify-end gap-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-            <Skeleton className="h-9 w-24" /> {/* Back button */}
-            <Skeleton className="h-9 w-24" /> {/* Submit button */}
+            {/* Back button */}
+            <Skeleton className="h-9 w-24" />
+            {/* Submit button */}
+            <Skeleton className="h-9 w-24" />
           </div>
         </Card>
       </div>

@@ -19,6 +19,7 @@ export async function login(
     await signIn("credentials", formData);
     return {ok: true};
   } catch(error) {
+    console.error('login error', error);
     if(isRedirectError(error)) {
       throw error;
     }
@@ -31,7 +32,6 @@ export async function login(
         return {ok: false, errorMessage: "Something went wrong.", email};
       }
     }
-    console.error("login error", error);
     throw error;
   }
 }

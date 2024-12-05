@@ -10,7 +10,6 @@ import { Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useActionState, useMemo } from 'react';
 
-
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const redirectTo = useMemo(() => searchParams.get('callbackUrl') ?? Paths.HOME, [searchParams]);
@@ -49,7 +48,7 @@ export default function LoginForm() {
       </div>
       {loginState?.errorMessage && (
         <div className="flex items-center gap-2 p-4 border border-zinc-200 bg-zinc-50 rounded-lg shadow-sm animate-in fade-in duration-200">
-          <div className="min-w-4 min-h-4 rounded-full bg-black"></div>
+          <div className="min-w-4 min-h-4 rounded-full bg-black" />
           <p className="text-sm font-medium text-zinc-900">{loginState?.errorMessage}</p>
         </div>
       )}

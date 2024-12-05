@@ -19,10 +19,10 @@ export default function LogoutButton() {
       redirectTo
     });
     // do not set isPending to false, because the page will reload
-  }
+  };
 
   return (
-    <Button 
+    <Button
       variant="ghost"
       className="
       w-full
@@ -37,5 +37,5 @@ export default function LogoutButton() {
         <LogOut className="h-4 w-4" />)}
       Logout
     </Button>
-  )
+  );
 }
