@@ -1,13 +1,15 @@
 import BreadcrumbComponent from "@/components/BreadcrumbComponent";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Paths } from "@/constants/paths";
-export default function BreadcrumbSlot() {
+
+export default async function BreadcrumbSlot() {
   return (
     <BreadcrumbComponent
       items={[
         { label: "Home", href: "/" },
-        { label: "My Posts", href: Paths.DASHBOARD },
+        { label: "Dashboard", href: Paths.DASHBOARD },
       ]}
-      current="New Post"
+      current={<Skeleton className="h-4 w-[70px]" />}
     />
   );
 }

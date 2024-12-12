@@ -1,10 +1,14 @@
 # Next.js 15 Full-Stack Template
 
+// TODO: add disclaimer about this stack
+// Add a branch with cleaned project to be used at a good start
+
 A modern, Docker-ready full-stack template built with Next.js 15, Prisma ORM, and shadcn/ui components. This template provides a robust starting point for building scalable web applications with a clean architecture and developer-friendly setup.
 
 ## Features
 
 - 🚀 **Next.js 15** with App Router
+- ⚛️ **React 19** with server actions
 - 🛢️ **Prisma ORM** with PostgreSQL
 - 🎨 **shadcn/ui** components
 - 🔐 **NextAuth** for authentication (with simple role enum access control)

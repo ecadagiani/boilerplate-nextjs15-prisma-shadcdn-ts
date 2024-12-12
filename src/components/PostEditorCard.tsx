@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Paths } from "@/constants/paths";
+import { useToast } from "@/hooks/use-toast";
+import { ActionReturn } from "@/lib/types/action";
 import { cn } from "@/utils/shadcn";
 import { Edit, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -32,7 +34,7 @@ export interface PostEditorCardProps extends PostCardProps {
   id: string
   createdAt: Date
   updatedAt: Date
-  actionDelete: (id: string) => Promise<{ ok: boolean, postId?: string }>
+  actionDelete: (id: string) => Promise<ActionReturn<{ postId?: string, postTitle?: string }>>
   updateList: (postId: string) => void
 }
 
@@ -100,16 +102,39 @@ const PostEditorCard = memo(function PostEditorCard({
   updateList,
 }: PostEditorCardProps) {
   const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
 
   const handleDelete = () => {
     if (actionDelete) {
       startTransition(async () => {
-        console.log("actionDelete", actionDelete, id);
         const result = await actionDelete(id);
-        console.log("actionDelete result", result);
         if (result.ok && result.postId) {
-          console.log("actionDelete updateList result.post.id", result.postId);
           updateList(result.postId);
+          toast({
+            title: "Post deleted",
+            description: `The post "${result.postTitle}" has been deleted successfully`,
+          });
+        }
+        else if (result.errors) {
+          let error = "";
+          if (Array.isArray(result.errors)) {
+            error = result.errors.map(e => typeof e === "string" ? e : e.message).join(", ");
+          }
+          else {
+            error = result.errors;
+          }
+          toast({
+            title: "Error",
+            description: error,
+            variant: "destructive",
+          });
+        }
+        else {
+          toast({
+            title: "Error",
+            description: "An unknown error occurred",
+            variant: "destructive",
+          });
         }
       });
     }

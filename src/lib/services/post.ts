@@ -107,13 +107,15 @@ export async function createPost({
   title,
   slug,
   content,
+  excerpt,
   categories,
 }: {
   authorId: string
   title: string
   slug: string
   content: string
-  categories: string[] | undefined
+  excerpt?: string
+  categories?: string[]
 }) {
   ensureServer("services/createPost");
 
@@ -123,6 +125,7 @@ export async function createPost({
       title,
       slug,
       content,
+      excerpt,
       categories: {
         create: categories?.map(categoryId => ({
           category: {
@@ -140,4 +143,48 @@ export async function deletePost(id: string) {
   ensureServer("services/deletePost");
   await prisma.categoriesOnPosts.deleteMany({ where: { postId: id } });
   return prisma.post.delete({ where: { id } });
+}
+
+export async function updatePost({
+  id,
+  title,
+  slug,
+  content,
+  excerpt,
+  categories,
+}: {
+  id: string
+  title: string
+  slug: string
+  content: string
+  excerpt?: string
+  categories?: string[]
+}) {
+  ensureServer("services/updatePost");
+
+  // Delete existing category relationships
+  await prisma.categoriesOnPosts.deleteMany({
+    where: { postId: id },
+  });
+
+  // Update post with new data and categories
+  const result = await prisma.post.update({
+    where: { id },
+    data: {
+      title,
+      slug,
+      content,
+      excerpt,
+      categories: {
+        create: categories?.map(categoryId => ({
+          category: {
+            connect: { id: categoryId },
+          },
+        })),
+      },
+    },
+  });
+
+  if (!result) return undefined;
+  return getPost({ id: result.id });
 }

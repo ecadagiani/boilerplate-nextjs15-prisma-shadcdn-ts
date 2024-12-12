@@ -4,6 +4,7 @@ import { Session } from "next-auth";
 
 export default async function AccountPage() {
   const session = await auth() as Session;
+  // TODO: move this out of the dashboard, and use AccessControl
   return (
     <DefaultLayout
       title="My Account"

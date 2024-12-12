@@ -11,7 +11,7 @@ export interface DefaultLayoutProps {
 }
 
 export const defaultTitleClassName = "text-5xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-6xl";
-export const defaultDescriptionClassName = "text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto";
+export const defaultDescriptionClassName = "text-lg text-zinc-600 dark:text-zinc-400 mx-auto px-8";
 export default memo(function DefaultLayout({
   className,
   title,
