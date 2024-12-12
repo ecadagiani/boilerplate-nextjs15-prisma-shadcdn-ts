@@ -1,42 +1,42 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
   // Create user
   const john = await prisma.user.create({
     data: {
-      email: 'john.doe@example.com',
+      email: "john.doe@example.com",
       emailVerified: new Date(),
-      name: 'John Doe',
-      password: await bcrypt.hash('foobar', 10),
-      role: 'ADMIN',
+      name: "John Doe",
+      password: await bcrypt.hash("foobar", 10),
+      role: "ADMIN",
     },
-  })
+  });
 
   // Create categories
   const beerCategory = await prisma.category.create({
     data: {
-      name: 'Beer',
-      slug: 'beer',
-      color: '#FFA500', // Orange color
+      name: "Beer",
+      slug: "beer",
+      color: "#FFA500", // Orange color
     },
-  })
+  });
 
   const javascriptCategory = await prisma.category.create({
     data: {
-      name: 'JavaScript',
-      slug: 'javascript',
-      color: '#F7DF1E', // JavaScript yellow
+      name: "JavaScript",
+      slug: "javascript",
+      color: "#F7DF1E", // JavaScript yellow
     },
-  })
+  });
 
   // Create posts
   const kveikPost = await prisma.post.create({
     data: {
-      title: 'Understanding Kveik Yeast in Modern Brewing',
-      slug: 'kveik-yeast-modern-brewing',
+      title: "Understanding Kveik Yeast in Modern Brewing",
+      slug: "kveik-yeast-modern-brewing",
       content: `Kveik is a family of traditional Norwegian farmhouse yeast strains that has revolutionized modern brewing. 
 These remarkable yeasts can ferment at extremely high temperatures (30-40°C) while producing clean, fruity profiles.
 Their fast fermentation capabilities and unique characteristics make them a valuable tool for both traditional and craft brewers.
@@ -65,12 +65,12 @@ The diversity of Kveik strains offers brewers a wide palette of flavors:
         ],
       },
     },
-  })
+  });
 
   const functionGeneratorPost = await prisma.post.create({
     data: {
-      title: 'Deep Dive into JavaScript Function Generators',
-      slug: 'deep-dive-javascript-function-generators',
+      title: "Deep Dive into JavaScript Function Generators",
+      slug: "deep-dive-javascript-function-generators",
       content: `Function generators in JavaScript are powerful tools for creating iterative algorithms. Using the function* syntax and yield keyword, we can create functions that can be paused and resumed, making them perfect for handling streams of data and implementing complex iterative logic.
 
 ## What Makes Generators Special?
@@ -174,16 +174,16 @@ Function generators are a powerful feature that, while not commonly used in ever
         ],
       },
     },
-  })
+  });
 
-  console.log('Database has been seeded! 🌱')
+  console.log("Database has been seeded! 🌱");
 }
 
 main()
   .catch((e) => {
-    console.error(e)
-    process.exit(1)
+    console.error(e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  }) 
+    await prisma.$disconnect();
+  });

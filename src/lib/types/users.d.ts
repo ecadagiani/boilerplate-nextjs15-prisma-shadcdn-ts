@@ -1,3 +1,3 @@
-import type { User } from "@prisma/client";
+import type { User as UserDTO } from "@prisma/client";
 
-export type UserWithoutPassword = Omit<User, 'password'>;
+export type UserWithoutPassword = Omit<UserDTO, "password">;

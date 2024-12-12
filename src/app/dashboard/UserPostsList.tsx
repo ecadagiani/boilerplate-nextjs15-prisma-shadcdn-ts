@@ -3,30 +3,28 @@
 import { deletePostAction } from "@/actions/post";
 import type { PostEditorCardProps } from "@/components/PostEditorCard";
 import PostEditorCard, { PostEditorCardSkeleton } from "@/components/PostEditorCard";
-import PostsList from "@/components/PostsList";
+import PostsList, { AdditionalPostCardProps } from "@/components/PostsList";
 import type { SortOrder } from "@/lib/types/api";
-import type { PostWithRelationsAndExcerpt } from "@/lib/types/posts";
+import type { Post } from "@/lib/types/posts";
 import { queryUserPosts } from "@/query/post";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Session } from "next-auth";
 import { useCallback, useMemo, useState } from "react";
 
 export interface DashboardPostsPageProps {
-  initialPosts: PostWithRelationsAndExcerpt[]
+  initialPosts: Post[]
   initialSortOrder: SortOrder
   session: Session
 }
 
-interface DashboardPostCardProps extends PostEditorCardProps {
-  updateList: (postId: string) => void
-}
+interface DashboardPostCardProps extends AdditionalPostCardProps, Pick<PostEditorCardProps, "updateList"> {}
 
-function DashboardPostCard({
+const DashboardPostCard = ({
   updateList,
   ...props
-}: DashboardPostCardProps) {
+}: DashboardPostCardProps) => {
   return <PostEditorCard {...props} updateList={updateList} actionDelete={deletePostAction} />;
-}
+};
 
 export default function UserPostsList({
   initialPosts,
@@ -51,7 +49,7 @@ export default function UserPostsList({
   const postCardComponentProps = useMemo(() => ({ updateList: removePost }), [removePost]);
 
   return (
-    <PostsList<{ updateList: (postId: string) => void }>
+    <PostsList
       onSortChange={setSortOrder}
       sortOrder={sortOrder}
       posts={posts}

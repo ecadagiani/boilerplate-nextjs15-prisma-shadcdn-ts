@@ -12,15 +12,13 @@ import { Badge } from "./ui/badge";
 export interface PostCardProps {
   title: string
   author: {
-    name: string
+    name?: string
     email: string
   }
   categories: {
-    category: {
-      name: string
-    }
+    name: string
   }[]
-  published: Date
+  published?: Date
   excerpt: string
   slug: string
 }
@@ -40,8 +38,8 @@ const PostCard = memo(function PostCard({
           <CardTitle className="text-lg font-semibold text-zinc-900 dark:text-white">{title}</CardTitle>
           <div className="flex flex-wrap gap-2">
             {categories.map(c => (
-              <Badge key={c.category.name} variant="outline">
-                {c.category.name}
+              <Badge key={c.name} variant="outline">
+                {c.name}
               </Badge>
             ))}
           </div>

@@ -22,7 +22,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Paths } from "@/constants/paths";
 import { cn } from "@/utils/shadcn";
-import type { Post } from "@prisma/client";
 import { Edit, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { memo, useTransition } from "react";
@@ -33,7 +32,7 @@ export interface PostEditorCardProps extends PostCardProps {
   id: string
   createdAt: Date
   updatedAt: Date
-  actionDelete: (id: string) => Promise<{ ok: boolean, post?: Post }>
+  actionDelete: (id: string) => Promise<{ ok: boolean, postId?: string }>
   updateList: (postId: string) => void
 }
 
@@ -108,10 +107,10 @@ const PostEditorCard = memo(function PostEditorCard({
         console.log("actionDelete", actionDelete, id);
         const result = await actionDelete(id);
         console.log("actionDelete result", result);
-        // if(result.ok && result.post?.id) {
-        //   console.log('actionDelete updateList result.post.id', result.post.id);
-        //   updateList(result.post.id);
-        // }
+        if (result.ok && result.postId) {
+          console.log("actionDelete updateList result.post.id", result.postId);
+          updateList(result.postId);
+        }
       });
     }
   };
@@ -203,11 +202,11 @@ const PostEditorCard = memo(function PostEditorCard({
 
           {categories.map(c => (
             <Badge
-              key={c.category.name}
+              key={c.name}
               variant={published ? "outline" : "secondary"}
               className={!published ? "bg-white dark:bg-zinc-800" : ""}
             >
-              {c.category.name}
+              {c.name}
             </Badge>
           ))}
         </div>

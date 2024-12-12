@@ -5,7 +5,7 @@ export default function BreadcrumbSlot() {
       items={[
         { label: "Home", href: "/" },
       ]}
-      current="Login"
+      current="My Account"
     />
   );
 }

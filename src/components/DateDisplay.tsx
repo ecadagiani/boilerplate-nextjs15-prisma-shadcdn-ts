@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
+import { memo } from "react";
 
 export interface DateDisplayProps {
   date: Date | string
   showTime?: boolean
-  dateStyle?: Intl.DateTimeFormatOptions['dateStyle']
-  timeStyle?: Intl.DateTimeFormatOptions['timeStyle']
+  dateStyle?: Intl.DateTimeFormatOptions["dateStyle"]
+  timeStyle?: Intl.DateTimeFormatOptions["timeStyle"]
 }
 
-const DateDisplay = memo(({
+const DateDisplay = memo(function DateDisplay({
   date,
   showTime = false,
-  dateStyle = 'medium',
-  timeStyle = 'short'
-}: DateDisplayProps) => {
+  dateStyle = "medium",
+  timeStyle = "short",
+}: DateDisplayProps) {
   const formatDate = () => {
     const dateObj = date instanceof Date ? date : new Date(date);
 
     const options: Intl.DateTimeFormatOptions = {
       dateStyle,
-      ...(showTime && { timeStyle })
+      ...(showTime && { timeStyle }),
     };
 
     return dateObj.toLocaleDateString(undefined, options);
@@ -29,6 +29,6 @@ const DateDisplay = memo(({
   return <span suppressHydrationWarning>{formatDate()}</span>;
 });
 
-DateDisplay.displayName = 'DateDisplay';
+DateDisplay.displayName = "DateDisplay";
 
 export default DateDisplay;

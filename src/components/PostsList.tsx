@@ -3,27 +3,29 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { SortOrder } from "@/lib/types/api";
-import type { PostWithRelationsAndExcerpt } from "@/lib/types/posts";
+import type { Post } from "@/lib/types/posts";
 
-export interface PostsListProps<TAdditionalPostCardProps extends Record<string, unknown>> {
+export interface AdditionalPostCardProps extends Post, Record<string, unknown> {}
+
+export interface PostsListProps<T extends AdditionalPostCardProps> {
   onSortChange?: (sortOrder: SortOrder) => void
   sortOrder?: SortOrder
-  posts?: PostWithRelationsAndExcerpt[]
+  posts?: Post[]
   isLoading?: boolean
-  PostCardComponent?: React.ComponentType<PostWithRelationsAndExcerpt & TAdditionalPostCardProps>
+  PostCardComponent?: React.ComponentType<T>
   PostCardSkeletonComponent?: React.ComponentType
-  additionalPostCardProps?: TAdditionalPostCardProps
+  additionalPostCardProps?: Omit<T, keyof Post>
 }
 
-export default function PostsList<TAdditionalPostCardProps extends Record<string, unknown>>({
+export default function PostsList<T extends AdditionalPostCardProps>({
   onSortChange,
   sortOrder,
   posts,
   isLoading,
-  PostCardComponent = PostCard,
+  PostCardComponent = PostCard as React.ComponentType<T>,
   PostCardSkeletonComponent = PostCardSkeleton,
-  additionalPostCardProps,
-}: PostsListProps<TAdditionalPostCardProps>) {
+  additionalPostCardProps = {} as Omit<T, keyof Post>,
+}: PostsListProps<T>) {
   return (
     <>
       {/* Sort Control */}
@@ -55,11 +57,20 @@ export default function PostsList<TAdditionalPostCardProps extends Record<string
             ))
           )
           : (
-            posts?.map(post => (
-              <div key={post.id} className="transform transition-all hover:-translate-y-1">
-                <PostCardComponent {...additionalPostCardProps} {...post} />
-              </div>
-            ))
+            posts?.map((post) => {
+              const props = {
+                ...additionalPostCardProps,
+                ...post,
+              } as T;
+
+              return (
+                <div key={post.id} className="transform transition-all hover:-translate-y-1">
+                  <PostCardComponent
+                    {...props}
+                  />
+                </div>
+              );
+            })
           )}
       </div>
     </>

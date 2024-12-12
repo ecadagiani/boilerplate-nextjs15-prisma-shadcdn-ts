@@ -59,22 +59,22 @@ export default async function AccessControl({
   redirectToForbidden = Paths.HOME,
   withCallbackUrl = true,
   withCallbackUrlForbidden = false,
-}: AccessControlProps): Promise<Awaited<JSX.Element>> {
+}: AccessControlProps): Promise<Awaited<React.ReactNode>> {
   const session = await auth();
   const headerList = await headers();
   const currentPath = headerList.get("x-current-path");
 
   if (!session) {
-    return fallback as JSX.Element || redirect(redirectTo + (withCallbackUrl ? `?callbackUrl=${currentPath}` : ""));
+    return fallback as React.ReactNode || redirect(redirectTo + (withCallbackUrl ? `?callbackUrl=${currentPath}` : ""));
   }
 
   if (roles) {
     const roleList = Array.isArray(roles) ? roles : [roles];
     if (!roleList.includes(session.user.role)) {
       const redirectUrl = (redirectToForbidden || redirectTo) + (withCallbackUrlForbidden ? `?callbackUrl=${currentPath}` : "");
-      return fallback as JSX.Element || redirect(redirectUrl);
+      return fallback as React.ReactNode || redirect(redirectUrl);
     }
   }
 
-  return children as JSX.Element;
+  return children as React.ReactNode;
 }

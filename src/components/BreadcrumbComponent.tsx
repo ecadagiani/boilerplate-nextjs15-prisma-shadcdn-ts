@@ -5,20 +5,20 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import Link from 'next/link';
-import React from 'react';
+} from "@/components/ui/breadcrumb";
+import Link from "next/link";
+import React, { memo } from "react";
 
 export interface BreadcrumbComponentProps {
-  items: Array<{
-    label: string;
-    href?: string;
-    component?: React.ReactNode;
-  }>;
-  current?: string | React.ReactNode;
+  items: {
+    label: string
+    href?: string
+    component?: React.ReactNode
+  }[]
+  current?: string | React.ReactNode
 };
 
-export default function BreadcrumbComponent({ items, current }: BreadcrumbComponentProps) {
+const BreadcrumbComponent = memo(function BreadcrumbComponent({ items, current }: BreadcrumbComponentProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -51,4 +51,8 @@ export default function BreadcrumbComponent({ items, current }: BreadcrumbCompon
       </BreadcrumbList>
     </Breadcrumb>
   );
-}
+});
+
+BreadcrumbComponent.displayName = "BreadcrumbComponent";
+
+export default BreadcrumbComponent;

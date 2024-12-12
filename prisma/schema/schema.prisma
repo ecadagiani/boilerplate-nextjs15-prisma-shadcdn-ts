@@ -18,8 +18,9 @@ model Post {
   id         String              @id @default(cuid())
   title      String
   slug       String              @unique
+  excerpt    String?             @db.VarChar(255)
   content    String              @db.Text
-  author     User                @relation(fields: [authorId], references: [id])
+  author     User                @relation(fields: [authorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   authorId   String
   categories CategoriesOnPosts[]
   published  DateTime?
@@ -43,9 +44,9 @@ model Category {
 
 // Junction table for many-to-many relationship between Post and Category
 model CategoriesOnPosts {
-  post       Post     @relation(fields: [postId], references: [id])
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   postId     String
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   categoryId String
   assignedAt DateTime @default(now())
 

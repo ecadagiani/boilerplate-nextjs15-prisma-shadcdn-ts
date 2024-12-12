@@ -1,17 +1,17 @@
-'use server';
+"use server";
 
-import { auth } from '@/auth';
-import LoginForm from '@/components/auth/LoginForm';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Paths } from '@/constants/paths';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
- 
+import { auth } from "@/auth";
+import LoginForm from "@/components/auth/LoginForm";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Paths } from "@/constants/paths";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+
 export default async function LoginPage() {
   const session = await auth();
 
-  if(session) {
+  if (session) {
     redirect(Paths.DASHBOARD);
   }
 
@@ -29,8 +29,8 @@ export default async function LoginPage() {
         <CardContent>
           <LoginForm />
 
-          <Button 
-            type="button" 
+          <Button
+            type="button"
             variant="outline"
             className="border-black shadow hover:bg-black hover:text-white w-full mt-2"
             asChild

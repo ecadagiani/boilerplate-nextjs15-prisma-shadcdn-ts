@@ -1,19 +1,38 @@
-import type { Post } from '@prisma/client';
+import type { Post as PostDTO } from "@prisma/client";
+export type { PostDTO };
 
-export type PostWithRelations = Post & {
+export interface PostDTOWithRelations extends PostDTO {
   author: {
-    name: string | null;
-    email: string;
-  };
-  categories: Array<{
+    id: string
+    name: string | null
+    email: string
+  }
+  categories: {
     category: {
-      name: string;
-    };
-  }>;
-};
+      id: string
+      name: string
+      slug: string
+    }
+  }[]
+}
 
-export type PostWithExcerpt = Post & {
-  excerpt: string;
-};
-
-export type PostWithRelationsAndExcerpt = PostWithRelations & PostWithExcerpt;
+export interface Post {
+  id: string
+  title: string
+  slug: string
+  excerpt: string
+  content: string
+  createdAt: Date
+  updatedAt: Date
+  published?: Date
+  author: {
+    id: string
+    name?: string
+    email: string
+  }
+  categories: {
+    id: string
+    name: string
+    slug: string
+  }[]
+}

@@ -1,20 +1,21 @@
-import { internalServerError, jsonData } from '@/lib/apiResponse';
-import { getPosts } from '@/lib/services/post';
-import type { PostWithRelations } from '@/lib/types/posts';
+import { internalServerError, jsonData } from "@/lib/apiResponse";
+import { getPosts } from "@/lib/services/post";
+import type { Post } from "@/lib/types/posts";
 
 export async function GET(
-  request: Request
-){
+  request: Request,
+) {
   try {
     const { searchParams } = new URL(request.url);
-    const posts = await getPosts({ 
+    const posts = await getPosts({
       published: true,
-      sortOrder: searchParams.get('sortOrder') as 'asc' | 'desc' ?? undefined,
+      sortOrder: searchParams.get("sortOrder") as "asc" | "desc" ?? undefined,
     });
 
-    return jsonData<{posts: PostWithRelations[]}>({posts})
-  } catch (error) {
-    console.error('Failed to fetch posts:', error);
-    return internalServerError()
+    return jsonData<{ posts: Post[] }>({ posts });
+  }
+  catch (error) {
+    console.error("Failed to fetch posts:", error);
+    return internalServerError();
   }
 }

@@ -1,19 +1,20 @@
-'use server';
+"use server";
 
 import { actionWithAuth } from "@/lib/actionWithAuth";
 import { createPost, deletePost, getPost } from "@/lib/services/post";
 import type { ActionReturn } from "@/lib/types/action";
+import { Post } from "@/lib/types/posts";
 import { postSchema } from "@/lib/validation/post";
 import { transformZodErrors } from "@/utils/validation";
-import { Role, type Post } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { z } from "zod";
 
 type PostSchemaInfer = z.infer<typeof postSchema>;
-type ActionPostResultErrors = { path: keyof PostSchemaInfer; message: string }[];
+type ActionPostResultErrors = { path: keyof PostSchemaInfer, message: string }[];
 
 export type ActionPostResult = ActionReturn<{
-  errors?: string | ActionPostResultErrors;
-  post?: Post;
+  errors?: string | ActionPostResultErrors
+  post?: Post
 }>;
 
 export const createPostAction = actionWithAuth<[FormData], ActionPostResult>(
@@ -40,7 +41,8 @@ export const createPostAction = actionWithAuth<[FormData], ActionPostResult>(
         ok: true,
         post: result,
       };
-    } catch (error) {
+    }
+    catch (error) {
       if (error instanceof z.ZodError) {
         return {
           ok: false,
@@ -54,10 +56,10 @@ export const createPostAction = actionWithAuth<[FormData], ActionPostResult>(
         errors: "An unexpected error occurred. Could not create post.",
       };
     }
-  }
+  },
 );
 
-export const deletePostAction = actionWithAuth<[string], ActionReturn<{ post?: Post }>>(
+export const deletePostAction = actionWithAuth<[string], ActionReturn<{ postId?: string }>>(
   { roles: Role.USER },
   async (session, postId) => {
     try {
@@ -66,10 +68,12 @@ export const deletePostAction = actionWithAuth<[string], ActionReturn<{ post?: P
       if (!post) {
         return {
           ok: false,
-          errors: "Post not found"
+          errors: "Post not found",
         };
       }
-      if (post.authorId !== session.user.id) {
+
+      // Check if user owns the post
+      if (post.author.id !== session.user.id) {
         return {
           ok: false,
           errors: "You do not have permission to delete this post",
@@ -81,14 +85,15 @@ export const deletePostAction = actionWithAuth<[string], ActionReturn<{ post?: P
 
       return {
         ok: true,
-        post: result
+        postId: result.id,
       };
-    } catch (error) {
+    }
+    catch (error) {
       console.error(error);
       return {
         ok: false,
-        errors: "An unexpected error occurred. Could not delete post."
+        errors: "An unexpected error occurred. Could not delete post.",
       };
     }
-  }
+  },
 );

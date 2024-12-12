@@ -17,10 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { Paths } from "@/constants/paths";
+import { EXCERPT_MAX_LENGTH, EXCERPT_RECOMMENDED_LENGTH } from "@/constants/post";
 import { useWarnIfUnsavedChanges } from "@/hooks/useWarnIfUnsavedChanges";
-import { PostWithRelations } from "@/lib/types/posts";
+import { Post } from "@/lib/types/posts";
 import { postSchema } from "@/lib/validation/post";
-import { slugify } from "@/utils/string";
+import { excerptFromMarkdown, slugify } from "@/utils/string";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -35,7 +36,7 @@ type PostSchemaInfer = z.infer<typeof postSchema>;
 
 export interface PostEditorProps {
   action: (data: FormData) => Promise<ActionPostResult>
-  post?: PostWithRelations
+  post?: Post
   submitText?: string
   categories?: { value: string, label: string }[]
   redirectToPreview?: boolean
@@ -87,6 +88,7 @@ export default function PostEditor({
       title: post?.title || "",
       slug: post?.slug || "",
       content: post?.content || "",
+      excerpt: post?.excerpt || "",
     },
     mode: "onChange",
     delayError: 500,
@@ -110,7 +112,28 @@ export default function PostEditor({
     previousTitle.current = title;
   }, [title, form]);
 
+  // auto-generate excerpt from content
+  const content = form.watch("content");
+  const previousContent = useRef(content);
+  useEffect(() => {
+    if (!previousContent.current && !content) return; // avoid form.setValue on initial render
+
+    (async () => {
+      const currentExcerpt = form.getValues("excerpt");
+      const excerpt = await excerptFromMarkdown(content, EXCERPT_RECOMMENDED_LENGTH);
+      if (!currentExcerpt || currentExcerpt === excerpt) {
+        // TODO: make it work
+        form.setValue("excerpt", excerpt, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    })();
+  }, [content, form]);
+
   // warn if there are unsaved changes
+  // TODO: check why is dirty on going from another page
+  console.log({ isDirty: form.formState.isDirty });
   useWarnIfUnsavedChanges(form.formState.isDirty);
 
   // submit form data to action
@@ -142,11 +165,12 @@ export default function PostEditor({
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <Card className="space-y-8 p-8">
+    <div className="max-w-4xl mx-auto pb-8">
+      <Card className="p-8">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
           >
             <FormField
               control={form.control}
@@ -214,6 +238,26 @@ export default function PostEditor({
                     <Textarea
                       placeholder="Write your post content in markdown..."
                       className="min-h-[150px]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="excerpt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel aria-required>
+                    Excerpt
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Write your post excerpt..."
+                      className="min-h-[60px]"
+                      maxLength={EXCERPT_MAX_LENGTH}
                       {...field}
                     />
                   </FormControl>

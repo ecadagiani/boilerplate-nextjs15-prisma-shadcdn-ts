@@ -15,7 +15,7 @@ export default async function PreviewPostPage({
     const { slug } = await params;
     const post = await getPost({ slug });
 
-    if (!post || post.authorId !== session?.user?.id) {
+    if (!post || post.author?.id !== session?.user?.id) {
       notFound();
     }
 
