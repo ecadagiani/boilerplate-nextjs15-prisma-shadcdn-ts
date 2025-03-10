@@ -19,7 +19,6 @@ import { Paths } from "@/constants/paths";
 import { EXCERPT_MAX_LENGTH, EXCERPT_RECOMMENDED_LENGTH } from "@/constants/post";
 import { useToast } from "@/hooks/use-toast";
 import { useIsDirty } from "@/hooks/useIsDirty";
-import { useWarnIfUnsavedChanges } from "@/hooks/useWarnIfUnsavedChanges";
 import { ActionReturn } from "@/lib/types/action";
 import { Post } from "@/lib/types/posts";
 import { postSchema } from "@/lib/validation/post";
@@ -101,10 +100,7 @@ export default function PostEditor({
     delayError: 500,
   });
 
-  const isDirty = useIsDirty(form, { falseOnSubmit: true });
-
-  // warn if there are unsaved changes
-  useWarnIfUnsavedChanges(isDirty);
+  const isDirty = useIsDirty(form);
 
   // auto-generate slug from title
   const title = form.watch("title");
@@ -125,6 +121,7 @@ export default function PostEditor({
   useEffect(() => {
     if (!previousContent && !content) return; // avoid form.setValue on initial render
 
+    // TODO: debounce this, or find a solution, when user is typing fast, the excerpt is not updated
     (async () => {
       const currentExcerpt = form.getValues("excerpt");
       const excerptFromPreviousContent = await excerptFromMarkdown(previousContent, EXCERPT_RECOMMENDED_LENGTH);

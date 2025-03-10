@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { Post, PostDTOWithRelations } from "@/lib/types/posts";
 import { ensureServer } from "@/utils/ensureRuntime";
 import { excerptFromMarkdown } from "@/utils/string";
+import type { Prisma } from "@prisma/client";
 import BPromise from "bluebird";
 
 export async function mapPostDtoToDomain(
@@ -187,4 +188,11 @@ export async function updatePost({
 
   if (!result) return undefined;
   return getPost({ id: result.id });
+}
+
+export async function checkSlugExists(slug: string, excludePostId?: string) {
+  const where: Prisma.PostWhereInput = { slug };
+  if (excludePostId) where.id = { not: excludePostId };
+  const count = await prisma.post.count({ where });
+  return count > 0;
 }

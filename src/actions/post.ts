@@ -5,6 +5,7 @@ import { createPost, deletePost, getPost, updatePost } from "@/lib/services/post
 import type { ActionReturn } from "@/lib/types/action";
 import { Post } from "@/lib/types/posts";
 import { postSchema } from "@/lib/validation/post";
+import { createPostServerSchema } from "@/lib/validation/postServer";
 import { transformZodErrors } from "@/utils/validation";
 import { Role } from "@prisma/client";
 import { z } from "zod";
@@ -22,13 +23,15 @@ export const createPostAction = actionWithAuth<[FormData], ActionCreatePostResul
   async (session, formData) => {
     try {
     // validate the FormData
-      const validatedFields = postSchema.parse({
+      const validatedFields = await createPostServerSchema().parseAsync({
         title: formData.get("title"),
         slug: formData.get("slug"),
         content: formData.get("content"),
         excerpt: formData.get("excerpt"),
         categories: formData.getAll("categories"),
       });
+
+      console.log(validatedFields);
 
       const result = await createPost({
         authorId: session?.user.id,
@@ -66,7 +69,7 @@ export const updatePostAction = actionWithAuth<[string, FormData], ActionCreateP
   async (session, id, formData) => {
     try {
       // validate the FormData
-      const validatedFields = postSchema.parse({
+      const validatedFields = await createPostServerSchema(id).parseAsync({
         title: formData.get("title"),
         slug: formData.get("slug"),
         content: formData.get("content"),
