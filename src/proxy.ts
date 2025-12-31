@@ -19,9 +19,15 @@ const proxy = auth((request: NextRequest & { auth: Session | null }) => {
 
   const homeURL = new URL(Paths.HOME, request.nextUrl.origin);
   const loginURLWithCallback = new URL(Paths.LOGIN, request.nextUrl.origin);
-  loginURLWithCallback.searchParams.set("callbackUrl", request.nextUrl.pathname);
+  loginURLWithCallback.searchParams.set(
+    "callbackUrl",
+    request.nextUrl.pathname,
+  );
 
-  if (request.nextUrl.pathname.startsWith(Paths.ADMIN) && userRole !== Role.ADMIN) {
+  if (
+    request.nextUrl.pathname.startsWith(Paths.ADMIN) &&
+    userRole !== Role.ADMIN
+  ) {
     if (!isConnected) {
       return NextResponse.redirect(loginURLWithCallback);
     }

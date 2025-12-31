@@ -31,6 +31,6 @@ export function useIsDirty<T extends FieldValues>(form: UseFormReturn<T>) {
   return useMemo(() => {
     if (form.formState.isDirty === false) return false;
     return Object.keys(form.formState.dirtyFields).length > 0;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.formState.dirtyFields, watch]);
 }

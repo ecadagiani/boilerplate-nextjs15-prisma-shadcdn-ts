@@ -1,23 +1,28 @@
 import PostCard, { PostCardSkeleton } from "@/components/PostCard";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { SortOrder } from "@/lib/types/api";
+import type { SortOrder } from "@/lib/types/api";
 import type { Post } from "@/lib/types/posts";
 
-export interface AdditionalPostCardProps extends Post, Record<string, unknown> {}
+export interface AdditionalPostCardProps
+  extends Post, Record<string, unknown> {}
 
 export interface PostsListProps<T extends AdditionalPostCardProps> {
-  onSortChange?: (sortOrder: SortOrder) => void
-  sortOrder?: SortOrder
-  posts?: Post[]
-  isLoading?: boolean
-  PostCardComponent?: React.ComponentType<T>
-  PostCardSkeletonComponent?: React.ComponentType
-  additionalPostCardProps?: Omit<T, keyof Post>
+  onSortChange?: (sortOrder: SortOrder) => void;
+  sortOrder?: SortOrder;
+  posts?: Post[];
+  isLoading?: boolean;
+  PostCardComponent?: React.ComponentType<T>;
+  PostCardSkeletonComponent?: React.ComponentType;
+  additionalPostCardProps?: Omit<T, keyof Post>;
 }
 
-export default function PostsList<T extends AdditionalPostCardProps>({
+const PostsList = <T extends AdditionalPostCardProps>({
   onSortChange,
   sortOrder,
   posts,
@@ -25,7 +30,7 @@ export default function PostsList<T extends AdditionalPostCardProps>({
   PostCardComponent = PostCard as React.ComponentType<T>,
   PostCardSkeletonComponent = PostCardSkeleton,
   additionalPostCardProps = {} as Omit<T, keyof Post>,
-}: PostsListProps<T>) {
+}: PostsListProps<T>) => {
   return (
     <>
       {/* Sort Control */}
@@ -49,30 +54,33 @@ export default function PostsList<T extends AdditionalPostCardProps>({
       {/* Posts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isLoading
-          ? (
-            Array.from({ length: (posts ?? []).length || 6 }).map((_, index) => (
-              <div key={index} className="transform transition-all hover:-translate-y-1">
-                <PostCardSkeletonComponent />
-              </div>
-            ))
-          )
-          : (
-            posts?.map((post) => {
+          ? Array.from({ length: (posts ?? []).length || 6 }).map(
+              (_, index) => (
+                <div
+                  key={index}
+                  className="transform transition-all hover:-translate-y-1"
+                >
+                  <PostCardSkeletonComponent />
+                </div>
+              ),
+            )
+          : posts?.map((post) => {
               const props = {
                 ...additionalPostCardProps,
                 ...post,
               } as T;
 
               return (
-                <div key={post.id} className="transform transition-all hover:-translate-y-1">
-                  <PostCardComponent
-                    {...props}
-                  />
+                <div
+                  key={post.id}
+                  className="transform transition-all hover:-translate-y-1"
+                >
+                  <PostCardComponent {...props} />
                 </div>
               );
-            })
-          )}
+            })}
       </div>
     </>
   );
-}
+};
+export default PostsList;

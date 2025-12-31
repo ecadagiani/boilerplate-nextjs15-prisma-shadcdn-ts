@@ -11,13 +11,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Paths } from "@/constants/paths";
 import { cn } from "@/utils/shadcn";
-import {
-  Home, Pencil, PlusCircle, User,
-} from "lucide-react";
+import { Home, Pencil, PlusCircle, User } from "lucide-react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 
-function UserNavigation() {
+const UserNavigation = () => {
   return (
     <ul className="grid w-[200px] gap-2 p-4">
       <li>
@@ -41,18 +39,19 @@ function UserNavigation() {
       </li>
     </ul>
   );
-}
+};
 
 export interface NavbarProps {
-  session: Session | null
+  session: Session | null;
 }
 
-export default function Navbar({ session }: NavbarProps) {
+const Navbar = ({ session }: NavbarProps) => {
   const status = session ? "authenticated" : "unauthenticated";
   const sessionData = session;
   // const { data: sessionData, status } = useSession();
   return (
-    <header className="
+    <header
+      className="
       sticky
       top-0 z-50 w-full px-6 py-4
       bg-white/75 dark:bg-zinc-950/75
@@ -107,28 +106,27 @@ export default function Navbar({ session }: NavbarProps) {
       </NavigationMenu>
       <NavigationMenu withViewport={false}>
         <NavigationMenuList>
-          {status === "authenticated"
-            ? (
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm">{sessionData?.user.name}</span>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <UserNavigation />
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            )
-            : (
-              <NavigationMenuItem>
-                <Link href={Paths.LOGIN} className={navigationMenuTriggerStyle()}>
-                  Login
-                </Link>
-              </NavigationMenuItem>
-            )}
+          {status === "authenticated" ? (
+            <NavigationMenuItem>
+              <NavigationMenuTrigger className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                <span className="text-sm">{sessionData?.user.name}</span>
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <UserNavigation />
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          ) : (
+            <NavigationMenuItem>
+              <Link href={Paths.LOGIN} className={navigationMenuTriggerStyle()}>
+                Login
+              </Link>
+            </NavigationMenuItem>
+          )}
         </NavigationMenuList>
         <NavigationMenuViewport right />
       </NavigationMenu>
     </header>
   );
-}
+};
+export default Navbar;

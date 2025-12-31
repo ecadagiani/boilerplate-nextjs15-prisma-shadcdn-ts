@@ -5,8 +5,8 @@ export async function queryPosts({
   sortOrder = "desc",
   userId = null,
 }: {
-  sortOrder?: "desc" | "asc"
-  userId?: string | null
+  sortOrder?: "desc" | "asc";
+  userId?: string | null;
 }): Promise<Post[]> {
   const response = await api.get<{ posts: Post[] }>("/post", {
     params: { sortOrder, userId },
@@ -23,8 +23,8 @@ export async function queryUserPosts({
   sortOrder = "desc",
   userId = null,
 }: {
-  sortOrder?: "desc" | "asc"
-  userId?: string | null
+  sortOrder?: "desc" | "asc";
+  userId?: string | null;
 }): Promise<Post[]> {
   const response = await api.get<{ posts: Post[] }>(`/user/${userId}/post`, {
     params: { sortOrder },

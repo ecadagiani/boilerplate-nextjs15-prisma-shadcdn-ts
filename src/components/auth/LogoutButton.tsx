@@ -8,7 +8,7 @@ import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-export default function LogoutButton() {
+const LogoutButton = () => {
   const pathname = usePathname();
   const [isPending, setIsPending] = useState(false);
 
@@ -31,13 +31,13 @@ export default function LogoutButton() {
       onClick={handleLogout}
       disabled={isPending}
     >
-      {isPending
-        ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        )
-        : (
-          <LogOut className="h-4 w-4" />)}
+      {isPending ? (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      ) : (
+        <LogOut className="h-4 w-4" />
+      )}
       Logout
     </Button>
   );
-}
+};
+export default LogoutButton;

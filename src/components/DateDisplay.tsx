@@ -3,10 +3,10 @@
 import { memo } from "react";
 
 export interface DateDisplayProps {
-  date: Date | string
-  showTime?: boolean
-  dateStyle?: Intl.DateTimeFormatOptions["dateStyle"]
-  timeStyle?: Intl.DateTimeFormatOptions["timeStyle"]
+  date: Date | string;
+  showTime?: boolean;
+  dateStyle?: Intl.DateTimeFormatOptions["dateStyle"];
+  timeStyle?: Intl.DateTimeFormatOptions["timeStyle"];
 }
 
 const DateDisplay = memo(function DateDisplay({

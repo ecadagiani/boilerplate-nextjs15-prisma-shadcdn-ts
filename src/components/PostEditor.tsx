@@ -16,11 +16,14 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { Paths } from "@/constants/paths";
-import { EXCERPT_MAX_LENGTH, EXCERPT_RECOMMENDED_LENGTH } from "@/constants/post";
+import {
+  EXCERPT_MAX_LENGTH,
+  EXCERPT_RECOMMENDED_LENGTH,
+} from "@/constants/post";
 import { useToast } from "@/hooks/use-toast";
 import { useIsDirty } from "@/hooks/useIsDirty";
-import { ActionReturn } from "@/lib/types/action";
-import { Post } from "@/lib/types/posts";
+import type { ActionReturn } from "@/lib/types/action";
+import type { Post } from "@/lib/types/posts";
 import { postSchema } from "@/lib/validation/post";
 import { excerptFromMarkdown, slugify } from "@/utils/string";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +32,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDeferredValue, useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { MultiSelect } from "./ui/multi-select";
 
 // this file need to be splitted, and move post domain logic to a specific hook
@@ -38,21 +41,25 @@ import { MultiSelect } from "./ui/multi-select";
 type PostSchemaInfer = z.infer<typeof postSchema>;
 
 export interface PostEditorProps {
-  action: (data: FormData) => Promise<ActionReturn<{ post?: Post }>>
-  post?: Post
-  submitText?: string
-  categories?: { value: string, label: string }[]
-  redirectPathKey?: keyof typeof Paths
-  redirectReplace?: boolean
+  action: (data: FormData) => Promise<ActionReturn<{ post?: Post }>>;
+  post?: Post;
+  submitText?: string;
+  categories?: { value: string; label: string }[];
+  redirectPathKey?: keyof typeof Paths;
+  redirectReplace?: boolean;
 }
 
 export interface SubmitButtonProps {
-  isDisabled: boolean
-  isPending: boolean
-  submitText?: string
+  isDisabled: boolean;
+  isPending: boolean;
+  submitText?: string;
 }
 
-function SubmitButton({ isDisabled = false, isPending = false, submitText = "Save" }: SubmitButtonProps) {
+const SubmitButton = ({
+  isDisabled = false,
+  isPending = false,
+  submitText = "Save",
+}: SubmitButtonProps) => {
   return (
     <Button
       type="submit"
@@ -66,23 +73,26 @@ function SubmitButton({ isDisabled = false, isPending = false, submitText = "Sav
         disabled:opacity-50
       "
     >
-      {isPending
-        ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Saving...
-          </>
-        )
-        : (
-          submitText
-        )}
+      {isPending ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Saving...
+        </>
+      ) : (
+        submitText
+      )}
     </Button>
   );
-}
+};
 
-export default function PostEditor({
-  action, post, submitText, categories, redirectPathKey, redirectReplace = false,
-}: PostEditorProps) {
+const PostEditor = ({
+  action,
+  post,
+  submitText,
+  categories,
+  redirectPathKey,
+  redirectReplace = false,
+}: PostEditorProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { toast } = useToast();
@@ -94,7 +104,7 @@ export default function PostEditor({
       slug: post?.slug || "",
       content: post?.content || "",
       excerpt: post?.excerpt || "",
-      categories: post?.categories.map(category => category.id) || [],
+      categories: post?.categories.map((category) => category.id) || [],
     },
     mode: "onChange",
     delayError: 500,
@@ -103,6 +113,7 @@ export default function PostEditor({
   const isDirty = useIsDirty(form);
 
   // auto-generate slug from title
+  // eslint-disable-next-line react-hooks/incompatible-library
   const title = form.watch("title");
   const previousTitle = useDeferredValue(title);
   useEffect(() => {
@@ -124,9 +135,15 @@ export default function PostEditor({
     // TODO: debounce this, or find a solution, when user is typing fast, the excerpt is not updated
     (async () => {
       const currentExcerpt = form.getValues("excerpt");
-      const excerptFromPreviousContent = await excerptFromMarkdown(previousContent, EXCERPT_RECOMMENDED_LENGTH);
+      const excerptFromPreviousContent = await excerptFromMarkdown(
+        previousContent,
+        EXCERPT_RECOMMENDED_LENGTH,
+      );
       if (currentExcerpt === excerptFromPreviousContent) {
-        const newExcerpt = await excerptFromMarkdown(content, EXCERPT_RECOMMENDED_LENGTH);
+        const newExcerpt = await excerptFromMarkdown(
+          content,
+          EXCERPT_RECOMMENDED_LENGTH,
+        );
         form.setValue("excerpt", newExcerpt);
       }
     })();
@@ -151,21 +168,22 @@ export default function PostEditor({
       const result = await action(formData);
       if (result.ok && result.post) {
         if (redirectPathKey) {
-          if (!(redirectPathKey in Paths) || typeof Paths[redirectPathKey] !== "function")
+          if (
+            !(redirectPathKey in Paths) ||
+            typeof Paths[redirectPathKey] !== "function"
+          )
             throw new Error(`Invalid redirectPathKey: ${redirectPathKey}`);
 
           if (redirectReplace)
             router.replace(Paths[redirectPathKey](result.post.slug));
-          else
-            router.push(Paths[redirectPathKey](result.post.slug));
-        }
-        else {
+          else router.push(Paths[redirectPathKey](result.post.slug));
+        } else {
           form.reset({
             title: result.post.title,
             slug: result.post.slug,
             content: result.post.content,
             excerpt: result.post.excerpt,
-            categories: result.post.categories.map(category => category.id),
+            categories: result.post.categories.map((category) => category.id),
           });
         }
         toast({
@@ -178,14 +196,18 @@ export default function PostEditor({
       if (result.errors) {
         if (typeof result.errors === "string") {
           form.setError("root", { message: result.errors });
-        }
-        else {
+        } else {
           result.errors.forEach((error) => {
             if (typeof error === "string") {
               form.setError("root", { message: error });
-            }
-            else if (typeof error === "object" && "path" in error && "message" in error) {
-              form.setError(error.path as keyof PostSchemaInfer, { message: error.message });
+            } else if (
+              typeof error === "object" &&
+              "path" in error &&
+              "message" in error
+            ) {
+              form.setError(error.path as keyof PostSchemaInfer, {
+                message: error.message,
+              });
             }
           });
         }
@@ -197,10 +219,7 @@ export default function PostEditor({
     <div className="max-w-4xl mx-auto pb-8">
       <Card className="p-8">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="title"
@@ -208,10 +227,7 @@ export default function PostEditor({
                 <FormItem>
                   <FormLabel aria-required>Title*</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter post title"
-                      {...field}
-                    />
+                    <Input placeholder="Enter post title" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -261,9 +277,7 @@ export default function PostEditor({
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel aria-required>
-                    Content (Markdown)*
-                  </FormLabel>
+                  <FormLabel aria-required>Content (Markdown)*</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Write your post content in markdown..."
@@ -280,9 +294,7 @@ export default function PostEditor({
               name="excerpt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel aria-required>
-                    Excerpt
-                  </FormLabel>
+                  <FormLabel aria-required>Excerpt</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Write your post excerpt..."
@@ -298,11 +310,7 @@ export default function PostEditor({
 
             <FormRootError className="mt-4" align="right" />
             <div className="flex justify-end gap-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-              <Button
-                type="button"
-                variant="outline"
-                asChild
-              >
+              <Button type="button" variant="outline" asChild>
                 <Link href="/dashboard">Go back</Link>
               </Button>
               <SubmitButton
@@ -316,13 +324,15 @@ export default function PostEditor({
       </Card>
     </div>
   );
-}
+};
+export default PostEditor;
 
-export function PostEditorSkeleton() {
+export const PostEditorSkeleton = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="relative">
-        <Card className="
+        <Card
+          className="
           space-y-8 p-8
           bg-white dark:bg-zinc-900
           border border-zinc-200 dark:border-zinc-800
@@ -367,4 +377,4 @@ export function PostEditorSkeleton() {
       </div>
     </div>
   );
-}
+};

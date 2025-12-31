@@ -1,5 +1,6 @@
 "use client";
 
-export default function BreadcrumbDefaultSlot() {
+const BreadcrumbDefaultSlot = () => {
   return null;
-}
+};
+export default BreadcrumbDefaultSlot;

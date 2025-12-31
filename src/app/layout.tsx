@@ -22,13 +22,13 @@ export const metadata: Metadata = {
   description: "Blog",
 };
 
-export default async function RootLayout({
+const RootLayout = async ({
   breadcrumb,
   children,
 }: Readonly<{
-  breadcrumb: React.ReactNode
-  children: React.ReactNode
-}>) {
+  breadcrumb: React.ReactNode;
+  children: React.ReactNode;
+}>) => {
   const session = await auth();
   return (
     <html lang="en">
@@ -46,4 +46,5 @@ export default async function RootLayout({
       </body>
     </html>
   );
-}
+};
+export default RootLayout;

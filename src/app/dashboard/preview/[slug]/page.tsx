@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
-import DefaultLayout, { defaultTitleClassName } from "@/components/DefaultLayout";
+import DefaultLayout, {
+  defaultTitleClassName,
+} from "@/components/DefaultLayout";
 import PostContent from "@/components/PostContent";
 import { getPost } from "@/lib/services/post";
 import { cn } from "@/utils/shadcn";
@@ -8,7 +10,7 @@ import { notFound } from "next/navigation";
 export default async function PreviewPostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }) {
   try {
     const session = await auth();
@@ -28,8 +30,7 @@ export default async function PreviewPostPage({
         <PostContent {...post} isPreview />
       </DefaultLayout>
     );
-  }
-  catch {
+  } catch {
     notFound();
   }
 }

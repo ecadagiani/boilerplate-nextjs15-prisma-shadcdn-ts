@@ -3,16 +3,16 @@ import ReactMarkdown from "react-markdown";
 import { Skeleton } from "./ui/skeleton";
 
 interface PostContentProps {
-  content: string
+  content: string;
   author: {
-    name?: string
-    email: string
-  }
+    name?: string;
+    email: string;
+  };
   categories: {
-    name: string
-  }[]
-  published?: Date
-  isPreview?: boolean
+    name: string;
+  }[];
+  published?: Date;
+  isPreview?: boolean;
 }
 
 const PostContent = memo(function PostContent({
@@ -30,17 +30,9 @@ const PostContent = memo(function PostContent({
             By:
             {author.name || author.email}
           </p>
-          <p>
-            Categories:
-            {" "}
-            {categories.map(c => c.name).join(", ")}
-          </p>
+          <p>Categories: {categories.map((c) => c.name).join(", ")}</p>
           {published && (
-            <p>
-              Published:
-              {" "}
-              {new Date(published).toLocaleDateString()}
-            </p>
+            <p>Published: {new Date(published).toLocaleDateString()}</p>
           )}
           {isPreview && (
             <p className="text-yellow-600 dark:text-yellow-400 font-medium">

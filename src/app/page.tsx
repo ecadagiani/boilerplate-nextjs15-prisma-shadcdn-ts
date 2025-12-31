@@ -1,6 +1,8 @@
 "use client";
 
-import DefaultLayout, { defaultTitleClassName } from "@/components/DefaultLayout";
+import DefaultLayout, {
+  defaultTitleClassName,
+} from "@/components/DefaultLayout";
 import PostsList from "@/components/PostsList";
 import type { SortOrder } from "@/lib/types/api";
 import { queryPosts } from "@/query/post";
@@ -8,7 +10,7 @@ import { cn } from "@/utils/shadcn";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-export default function Home() {
+const Home = () => {
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
   const { data: posts, isLoading } = useQuery({
     queryKey: ["posts", sortOrder],
@@ -29,4 +31,5 @@ export default function Home() {
       />
     </DefaultLayout>
   );
-}
+};
+export default Home;

@@ -13,35 +13,32 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Paths } from "@/constants/paths";
 import { useToast } from "@/hooks/use-toast";
-import { ActionReturn } from "@/lib/types/action";
+import type { ActionReturn } from "@/lib/types/action";
 import { cn } from "@/utils/shadcn";
 import { Edit, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { memo, useTransition } from "react";
 import DateDisplay from "./DateDisplay";
-import { PostCardProps } from "./PostCard";
+import type { PostCardProps } from "./PostCard";
 
 export interface PostEditorCardProps extends PostCardProps {
-  id: string
-  createdAt: Date
-  updatedAt: Date
-  actionDelete: (id: string) => Promise<ActionReturn<{ postId?: string, postTitle?: string }>>
-  updateList: (postId: string) => void
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  actionDelete: (
+    id: string,
+  ) => Promise<ActionReturn<{ postId?: string; postTitle?: string }>>;
+  updateList: (postId: string) => void;
 }
 
 interface ButtonDeleteProps {
-  onDelete: () => void
-  isPublished: boolean
-  isPending: boolean
+  onDelete: () => void;
+  isPublished: boolean;
+  isPending: boolean;
 }
 
 const ButtonDelete = memo(function ButtonDelete({
@@ -61,25 +58,27 @@ const ButtonDelete = memo(function ButtonDelete({
           `}
           disabled={isPending}
         >
-          {isPending
-            ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            )
-            : (
-              <Trash2 className="h-4 w-4" />
-            )}
+          {isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Trash2 className="h-4 w-4" />
+          )}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Post</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this post? This action cannot be undone.
+            Are you sure you want to delete this post? This action cannot be
+            undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onDelete} className="bg-destructive hover:bg-destructive/90">
+          <AlertDialogAction
+            onClick={onDelete}
+            className="bg-destructive hover:bg-destructive/90"
+          >
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -114,13 +113,13 @@ const PostEditorCard = memo(function PostEditorCard({
             title: "Post deleted",
             description: `The post "${result.postTitle}" has been deleted successfully`,
           });
-        }
-        else if (result.errors) {
+        } else if (result.errors) {
           let error = "";
           if (Array.isArray(result.errors)) {
-            error = result.errors.map(e => typeof e === "string" ? e : e.message).join(", ");
-          }
-          else {
+            error = result.errors
+              .map((e) => (typeof e === "string" ? e : e.message))
+              .join(", ");
+          } else {
             error = result.errors;
           }
           toast({
@@ -128,8 +127,7 @@ const PostEditorCard = memo(function PostEditorCard({
             description: error,
             variant: "destructive",
           });
-        }
-        else {
+        } else {
           toast({
             title: "Error",
             description: "An unknown error occurred",
@@ -201,12 +199,14 @@ const PostEditorCard = memo(function PostEditorCard({
           />
         </div>
 
-        <CardTitle className={`
+        <CardTitle
+          className={`
             text-lg font-semibold 
-            ${published
-      ? "text-zinc-900 dark:text-white"
-      : "text-zinc-600 dark:text-zinc-300"
-    }
+            ${
+              published
+                ? "text-zinc-900 dark:text-white"
+                : "text-zinc-600 dark:text-zinc-300"
+            }
           `}
         >
           {title}
@@ -216,16 +216,19 @@ const PostEditorCard = memo(function PostEditorCard({
         <div className="flex flex-wrap gap-2 mt-2">
           <Badge
             variant={published ? "default" : "secondary"}
-            className={cn(!published && `
+            className={cn(
+              !published &&
+                `
                 bg-white dark:bg-zinc-800
                 border border-zinc-200 dark:border-zinc-700
                 hover:bg-white dark:hover:bg-zinc-800
-              `)}
+              `,
+            )}
           >
             {published ? "Published" : "Draft"}
           </Badge>
 
-          {categories.map(c => (
+          {categories.map((c) => (
             <Badge
               key={c.name}
               variant={published ? "outline" : "secondary"}
@@ -239,12 +242,13 @@ const PostEditorCard = memo(function PostEditorCard({
 
       <CardContent className="p-4 pt-0 text-sm space-y-4">
         <div className="space-y-2">
-          <p className={cn(
-            "line-clamp-2",
-            published
-              ? "text-zinc-600 dark:text-zinc-400"
-              : "text-zinc-500 dark:text-zinc-500",
-          )}
+          <p
+            className={cn(
+              "line-clamp-2",
+              published
+                ? "text-zinc-600 dark:text-zinc-400"
+                : "text-zinc-500 dark:text-zinc-500",
+            )}
           >
             {excerpt}
           </p>
@@ -274,7 +278,7 @@ const PostEditorCard = memo(function PostEditorCard({
 
 export default PostEditorCard;
 
-export function PostEditorCardSkeleton() {
+export const PostEditorCardSkeleton = () => {
   return (
     <Card className="overflow-hidden h-full relative bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
       {/* Header */}
@@ -323,4 +327,4 @@ export function PostEditorCardSkeleton() {
       </CardContent>
     </Card>
   );
-}
+};

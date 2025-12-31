@@ -1,12 +1,11 @@
 import DefaultLayout from "@/components/DefaultLayout";
 import { PostEditorSkeleton } from "@/components/PostEditor";
 
-export default async function NewPostPage() {
+const NewPostPage = async () => {
   return (
-    <DefaultLayout
-      title="New post"
-    >
+    <DefaultLayout title="New post">
       <PostEditorSkeleton />
     </DefaultLayout>
   );
-}
+};
+export default NewPostPage;

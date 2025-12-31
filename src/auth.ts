@@ -11,8 +11,8 @@ import { JWT } from "next-auth/jwt";
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
-    id?: string
-    role?: Role
+    id?: string;
+    role?: Role;
   }
 }
 
@@ -20,12 +20,12 @@ declare module "next-auth" {
   // augment the session type
   interface Session {
     user: {
-      role: Role
-      id: string
-    } & DefaultSession["user"]
+      role: Role;
+      id: string;
+    } & DefaultSession["user"];
   }
   interface User {
-    role?: Role
+    role?: Role;
   }
 }
 
@@ -53,15 +53,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               where: { email },
             });
             if (!user) return null;
-            const passwordsMatch = await bcrypt.compare(password, user.password);
+            const passwordsMatch = await bcrypt.compare(
+              password,
+              user.password,
+            );
 
             if (passwordsMatch) {
               return user;
             }
           }
           return null;
-        }
-        catch (error) {
+        } catch (error) {
           console.error("providers Credentials authorize error", error);
           return null;
         }
