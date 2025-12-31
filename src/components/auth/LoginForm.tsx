@@ -10,14 +10,17 @@ import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useActionState, useMemo } from "react";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const searchParams = useSearchParams();
-  const redirectTo = useMemo(() => searchParams.get("callbackUrl") ?? Paths.HOME, [searchParams]);
-
-  const [loginState, formAction, isPending] = useActionState<LoginResult, FormData>(
-    login,
-    { ok: false },
+  const redirectTo = useMemo(
+    () => searchParams.get("callbackUrl") ?? Paths.HOME,
+    [searchParams],
   );
+
+  const [loginState, formAction, isPending] = useActionState<
+    LoginResult,
+    FormData
+  >(login, { ok: false });
 
   return (
     <form action={formAction} className="grid gap-4">
@@ -49,21 +52,22 @@ export default function LoginForm() {
       {loginState?.errorMessage && (
         <div className="flex items-center gap-2 p-4 border border-zinc-200 bg-zinc-50 rounded-lg shadow-sm animate-in fade-in duration-200">
           <div className="min-w-4 min-h-4 rounded-full bg-black" />
-          <p className="text-sm font-medium text-zinc-900">{loginState?.errorMessage}</p>
+          <p className="text-sm font-medium text-zinc-900">
+            {loginState?.errorMessage}
+          </p>
         </div>
       )}
       <Button className="w-full mt-2" type="submit" disabled={isPending}>
-        {isPending
-          ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Please wait
-            </>
-          )
-          : (
-            "Login"
-          )}
+        {isPending ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Login"
+        )}
       </Button>
     </form>
   );
-}
+};
+export default LoginForm;

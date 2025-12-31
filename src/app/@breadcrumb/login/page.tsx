@@ -1,11 +1,10 @@
 import BreadcrumbComponent from "@/components/BreadcrumbComponent";
-export default function BreadcrumbSlot() {
+const BreadcrumbSlot = () => {
   return (
     <BreadcrumbComponent
-      items={[
-        { label: "Home", href: "/" },
-      ]}
+      items={[{ label: "Home", href: "/" }]}
       current="Login"
     />
   );
-}
+};
+export default BreadcrumbSlot;

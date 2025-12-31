@@ -2,7 +2,7 @@ import DefaultLayout from "@/components/DefaultLayout";
 import { PostContentSkeleton } from "@/components/PostContent";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function PostPageLoading() {
+const PostPageLoading = () => {
   return (
     <DefaultLayout
       title={<Skeleton className="h-8 w-2/3" />}
@@ -11,4 +11,5 @@ export default function PostPageLoading() {
       <PostContentSkeleton />
     </DefaultLayout>
   );
-}
+};
+export default PostPageLoading;

@@ -3,12 +3,18 @@
 import { auth } from "@/auth";
 import LoginForm from "@/components/auth/LoginForm";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Paths } from "@/constants/paths";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function LoginPage() {
+const LoginPage = async () => {
   const session = await auth();
 
   if (session) {
@@ -41,4 +47,5 @@ export default async function LoginPage() {
       </Card>
     </main>
   );
-}
+};
+export default LoginPage;

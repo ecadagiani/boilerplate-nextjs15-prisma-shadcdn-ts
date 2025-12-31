@@ -3,7 +3,7 @@
 import { EXCERPT_RECOMMENDED_LENGTH } from "@/constants/post";
 import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
-import { Post, PostDTOWithRelations } from "@/lib/types/posts";
+import type { Post, PostDTOWithRelations } from "@/lib/types/posts";
 import { ensureServer } from "@/utils/ensureRuntime";
 import { excerptFromMarkdown } from "@/utils/string";
 import BPromise from "bluebird";
@@ -19,12 +19,14 @@ export async function mapPostDtoToDomain(
       name: post.author.name ?? undefined,
       email: post.author.email,
     },
-    categories: post.categories.map(c => ({
+    categories: post.categories.map((c) => ({
       id: c.category.id,
       name: c.category.name,
       slug: c.category.slug,
     })),
-    excerpt: post.excerpt ?? await excerptFromMarkdown(post.content, EXCERPT_RECOMMENDED_LENGTH),
+    excerpt:
+      post.excerpt ??
+      (await excerptFromMarkdown(post.content, EXCERPT_RECOMMENDED_LENGTH)),
   };
 
   return parsedPost;
@@ -36,10 +38,10 @@ export async function getPosts({
   sortOrder = "desc",
   take = 20,
 }: {
-  userId?: string | null
-  published?: boolean | null
-  sortOrder?: "asc" | "desc"
-  take?: number
+  userId?: string | null;
+  published?: boolean | null;
+  sortOrder?: "asc" | "desc";
+  take?: number;
 }): Promise<Post[]> {
   ensureServer("services/getPosts");
   const posts = await prisma.post.findMany({
@@ -70,15 +72,15 @@ export async function getPosts({
     take,
   });
 
-  return BPromise.map(posts, async post => mapPostDtoToDomain(post));
+  return BPromise.map(posts, async (post) => mapPostDtoToDomain(post));
 }
 
 export async function getPost({
   slug,
   id,
 }: {
-  slug?: string
-  id?: string
+  slug?: string;
+  id?: string;
 }): Promise<Post | undefined> {
   ensureServer("services/getPost");
   const post = await prisma.post.findUnique({
@@ -111,12 +113,12 @@ export async function createPost({
   excerpt,
   categories,
 }: {
-  authorId: string
-  title: string
-  slug: string
-  content: string
-  excerpt?: string
-  categories?: string[]
+  authorId: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt?: string;
+  categories?: string[];
 }) {
   ensureServer("services/createPost");
 
@@ -128,7 +130,7 @@ export async function createPost({
       content,
       excerpt,
       categories: {
-        create: categories?.map(categoryId => ({
+        create: categories?.map((categoryId) => ({
           category: {
             connect: { id: categoryId },
           },
@@ -154,12 +156,12 @@ export async function updatePost({
   excerpt,
   categories,
 }: {
-  id: string
-  title: string
-  slug: string
-  content: string
-  excerpt?: string
-  categories?: string[]
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt?: string;
+  categories?: string[];
 }) {
   ensureServer("services/updatePost");
 
@@ -177,7 +179,7 @@ export async function updatePost({
       content,
       excerpt,
       categories: {
-        create: categories?.map(categoryId => ({
+        create: categories?.map((categoryId) => ({
           category: {
             connect: { id: categoryId },
           },

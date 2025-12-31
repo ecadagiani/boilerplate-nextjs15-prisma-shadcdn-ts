@@ -1,5 +1,4 @@
-
-import { z } from "zod";
+import type { z } from "zod";
 
 export const transformZodErrors = (error: z.ZodError) => {
   return error.issues.map((issue) => ({

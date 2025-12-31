@@ -5,9 +5,9 @@ import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export interface LoginResult {
-  ok: boolean
-  errorMessage?: string
-  email?: string
+  ok: boolean;
+  errorMessage?: string;
+  email?: string;
 }
 
 export async function login(
@@ -18,8 +18,7 @@ export async function login(
   try {
     await signIn("credentials", formData);
     return { ok: true };
-  }
-  catch (error) {
+  } catch (error) {
     console.error("login error", error);
     if (isRedirectError(error)) {
       throw error;

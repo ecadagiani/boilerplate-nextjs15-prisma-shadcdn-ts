@@ -38,7 +38,7 @@ async function main() {
   });
 
   // Create posts
-  const kveikPost = await prisma.post.create({
+  const _kveikPost = await prisma.post.create({
     data: {
       title: "Understanding Kveik Yeast in Modern Brewing",
       slug: "kveik-yeast-modern-brewing",
@@ -72,7 +72,7 @@ The diversity of Kveik strains offers brewers a wide palette of flavors:
     },
   });
 
-  const functionGeneratorPost = await prisma.post.create({
+  const _functionGeneratorPost = await prisma.post.create({
     data: {
       title: "Deep Dive into JavaScript Function Generators",
       slug: "deep-dive-javascript-function-generators",
@@ -181,7 +181,7 @@ Function generators are a powerful feature that, while not commonly used in ever
     },
   });
 
-  console.log("Database has been seeded! 🌱");
+  console.info("Database has been seeded! 🌱");
 }
 
 main()

@@ -1,16 +1,10 @@
 "use client";
 
-import * as LabelPrimitive from "@radix-ui/react-label";
+import type * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
-import {
-  Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-  FormProvider,
-  useFormContext,
-} from "react-hook-form";
+import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
+import { Controller, FormProvider, useFormContext } from "react-hook-form";
 
 import { Label } from "@/components/ui/label";
 import { cn } from "@/utils/shadcn";
@@ -21,7 +15,7 @@ interface FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
-  name: TName
+  name: TName;
 }
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
@@ -65,7 +59,7 @@ const useFormField = () => {
 };
 
 interface FormItemContextValue {
-  id: string
+  id: string;
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>(
@@ -107,7 +101,8 @@ const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
+  const { error, formItemId, formDescriptionId, formMessageId } =
+    useFormField();
 
   return (
     <Slot
@@ -196,7 +191,13 @@ const FormRootError = React.forwardRef<
 FormRootError.displayName = "FormRootError";
 
 export {
-  Form, FormControl,
-  FormDescription, FormField, FormItem,
-  FormLabel, FormMessage, FormRootError, useFormField,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormRootError,
+  useFormField,
 };

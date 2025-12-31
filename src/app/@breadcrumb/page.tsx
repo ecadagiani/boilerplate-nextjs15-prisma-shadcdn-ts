@@ -7,7 +7,7 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 
-export default function BreadcrumbSlot() {
+const BreadcrumbSlot = () => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -17,4 +17,5 @@ export default function BreadcrumbSlot() {
       </BreadcrumbList>
     </Breadcrumb>
   );
-}
+};
+export default BreadcrumbSlot;

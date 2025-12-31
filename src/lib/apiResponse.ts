@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
 
 export function jsonData<T>(data: T, message = "Success") {
-  return NextResponse.json(
-    { ...data, message },
-  );
+  return NextResponse.json({ ...data, message });
 }
 
 export function internalServerError(message = "Internal server error") {
-  return NextResponse.json(
-    { error: message },
-    { status: 500 },
-  );
+  return NextResponse.json({ error: message }, { status: 500 });
 }
 
 export const unauthorized = (message = "Unauthorized") => {

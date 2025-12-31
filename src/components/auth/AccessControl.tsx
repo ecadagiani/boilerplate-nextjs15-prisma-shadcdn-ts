@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { Paths } from "@/constants/paths";
-import { Role } from "@/generated/prisma/client";
+import type { Role } from "@/generated/prisma/client";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -42,13 +42,13 @@ import { redirect } from "next/navigation";
  * ```
  */
 export interface AccessControlProps {
-  children: React.ReactNode
-  roles?: Role[] | Role | null
-  fallback?: React.ReactNode | null
-  redirectTo?: string
-  redirectToForbidden?: string | null
-  withCallbackUrl?: boolean
-  withCallbackUrlForbidden?: boolean
+  children: React.ReactNode;
+  roles?: Role[] | Role | null;
+  fallback?: React.ReactNode | null;
+  redirectTo?: string;
+  redirectToForbidden?: string | null;
+  withCallbackUrl?: boolean;
+  withCallbackUrlForbidden?: boolean;
 }
 
 export default async function AccessControl({
@@ -65,14 +65,21 @@ export default async function AccessControl({
   const currentPath = headerList.get("x-current-path");
 
   if (!session) {
-    return fallback as React.ReactNode || redirect(redirectTo + (withCallbackUrl ? `?callbackUrl=${currentPath}` : ""));
+    return (
+      (fallback as React.ReactNode) ||
+      redirect(
+        redirectTo + (withCallbackUrl ? `?callbackUrl=${currentPath}` : ""),
+      )
+    );
   }
 
   if (roles) {
     const roleList = Array.isArray(roles) ? roles : [roles];
     if (!roleList.includes(session.user.role)) {
-      const redirectUrl = (redirectToForbidden || redirectTo) + (withCallbackUrlForbidden ? `?callbackUrl=${currentPath}` : "");
-      return fallback as React.ReactNode || redirect(redirectUrl);
+      const redirectUrl =
+        (redirectToForbidden || redirectTo) +
+        (withCallbackUrlForbidden ? `?callbackUrl=${currentPath}` : "");
+      return (fallback as React.ReactNode) || redirect(redirectUrl);
     }
   }
 

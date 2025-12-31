@@ -1,6 +1,6 @@
 import BreadcrumbComponent from "@/components/BreadcrumbComponent";
 import { Paths } from "@/constants/paths";
-export default function BreadcrumbSlot() {
+const BreadcrumbSlot = () => {
   return (
     <BreadcrumbComponent
       items={[
@@ -10,4 +10,5 @@ export default function BreadcrumbSlot() {
       current="New Post"
     />
   );
-}
+};
+export default BreadcrumbSlot;

@@ -11,14 +11,17 @@ import React, { memo } from "react";
 
 export interface BreadcrumbComponentProps {
   items: {
-    label: string
-    href?: string
-    component?: React.ReactNode
-  }[]
-  current?: string | React.ReactNode
-};
+    label: string;
+    href?: string;
+    component?: React.ReactNode;
+  }[];
+  current?: string | React.ReactNode;
+}
 
-const BreadcrumbComponent = memo(function BreadcrumbComponent({ items, current }: BreadcrumbComponentProps) {
+const BreadcrumbComponent = memo(function BreadcrumbComponent({
+  items,
+  current,
+}: BreadcrumbComponentProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>

@@ -1,12 +1,12 @@
 "use client";
 
-export default function GlobalError({
+const GlobalError = ({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) => {
   return (
     <html>
       <body className="flex items-center justify-center min-h-screen bg-background text-foreground">
@@ -21,7 +21,9 @@ export default function GlobalError({
               <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Error Details</span>
+              <span className="bg-background px-2 text-muted-foreground">
+                Error Details
+              </span>
             </div>
           </div>
 
@@ -43,4 +45,5 @@ export default function GlobalError({
       </body>
     </html>
   );
-}
+};
+export default GlobalError;

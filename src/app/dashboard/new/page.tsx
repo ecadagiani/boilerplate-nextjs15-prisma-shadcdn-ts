@@ -3,19 +3,18 @@ import DefaultLayout from "@/components/DefaultLayout";
 import PostEditor from "@/components/PostEditor";
 import { getCategories } from "@/lib/services/categories";
 
-export default async function NewPostPage() {
+const NewPostPage = async () => {
   const categories = await getCategories();
 
   return (
-    <DefaultLayout
-      title="New post"
-    >
+    <DefaultLayout title="New post">
       <PostEditor
         action={createPostAction}
         submitText="Create"
-        categories={categories.map(c => ({ value: c.id, label: c.name }))}
+        categories={categories.map((c) => ({ value: c.id, label: c.name }))}
         redirectPathKey="EDIT"
       />
     </DefaultLayout>
   );
-}
+};
+export default NewPostPage;

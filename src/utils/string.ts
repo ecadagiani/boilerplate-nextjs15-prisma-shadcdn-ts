@@ -18,16 +18,22 @@ export async function stripMarkdown(content: string) {
  * @param startpos Optional starting position to search from (defaults to end of string)
  * @returns The index of the last match, or -1 if no match found
  */
-export function regexLastIndexOf(string: string, regex: RegExp, startpos: number | undefined = undefined) {
-  const cleanRegex = (regex.global)
+export function regexLastIndexOf(
+  string: string,
+  regex: RegExp,
+  startpos: number | undefined = undefined,
+) {
+  const cleanRegex = regex.global
     ? regex
-    : new RegExp(regex.source, `g${regex.ignoreCase ? "i" : ""}${regex.multiline ? "m" : ""}`);
+    : new RegExp(
+        regex.source,
+        `g${regex.ignoreCase ? "i" : ""}${regex.multiline ? "m" : ""}`,
+      );
 
   let cleanStartPos = startpos;
   if (cleanStartPos === undefined) {
     cleanStartPos = string.length;
-  }
-  else if (cleanStartPos < 0) {
+  } else if (cleanStartPos < 0) {
     cleanStartPos = 0;
   }
 
@@ -35,8 +41,8 @@ export function regexLastIndexOf(string: string, regex: RegExp, startpos: number
   let lastIndexOf = -1;
   let nextStop = 0;
   let result;
-  // eslint-disable-next-line no-cond-assign
-  while ((result = cleanRegex.exec(stringToWorkWith)) != null) {
+
+  while ((result = cleanRegex.exec(stringToWorkWith)) !== null) {
     lastIndexOf = result.index;
     cleanRegex.lastIndex = ++nextStop;
   }
@@ -57,16 +63,25 @@ export function sliceWithoutBreakWord(
   str: string,
   start: number,
   end: number,
-  { ellipsis = "...", maxTrimmedLength = 10 }: { ellipsis?: string, maxTrimmedLength?: number } = {},
+  {
+    ellipsis = "...",
+    maxTrimmedLength = 10,
+  }: { ellipsis?: string; maxTrimmedLength?: number } = {},
 ) {
   if (str.length <= end) {
     return str;
   }
   const trimmedString = str.substring(start, end);
   // re-trim if we are in the middle of a word
-  const trimmedStringWithoutBreakWord = trimmedString.substring(0, Math.min(trimmedString.length, regexLastIndexOf(trimmedString, /\s/)));
+  const trimmedStringWithoutBreakWord = trimmedString.substring(
+    0,
+    Math.min(trimmedString.length, regexLastIndexOf(trimmedString, /\s/)),
+  );
 
-  if (maxTrimmedLength !== -1 && trimmedStringWithoutBreakWord.length < end - start - maxTrimmedLength) {
+  if (
+    maxTrimmedLength !== -1 &&
+    trimmedStringWithoutBreakWord.length < end - start - maxTrimmedLength
+  ) {
     // if the trimmed string is too short, return the original string)
     return `${trimmedString}${ellipsis}`;
   }

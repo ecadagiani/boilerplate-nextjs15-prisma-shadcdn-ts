@@ -1,7 +1,7 @@
 import BreadcrumbComponent from "@/components/BreadcrumbComponent";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default async function BreadcrumbSlot() {
+const BreadcrumbSlot = async () => {
   return (
     <BreadcrumbComponent
       items={[
@@ -11,4 +11,5 @@ export default async function BreadcrumbSlot() {
       current={<Skeleton className="h-4 w-[70px]" />}
     />
   );
-}
+};
+export default BreadcrumbSlot;

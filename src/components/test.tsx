@@ -1,7 +1,7 @@
-import { ComponentType } from "react";
+import type { ComponentType } from "react";
 
 interface SimpleCardProps {
-  name: string
+  name: string;
 }
 
 export const SimpleCard = ({ name }: SimpleCardProps) => {
@@ -14,35 +14,30 @@ export const SimpleCard = ({ name }: SimpleCardProps) => {
 };
 
 interface ComplexCardProps {
-  name: string
-  category: string
+  name: string;
+  category: string;
 }
 
 export const ComplexCard = ({ name, category }: ComplexCardProps) => {
   return (
     <div>
-      Name:
-      {" "}
-      {name}
-      , Category:
-      {" "}
-      {category}
+      Name: {name}, Category: {category}
     </div>
   );
 };
 
 interface Item {
-  name: string
+  name: string;
 }
 
 interface CardComponentProps {
-  name: string
+  name: string;
 }
 
 interface ListProps<T extends CardComponentProps> {
-  items: Item[]
-  CardComponent?: ComponentType<T>
-  additionalCardProps?: Omit<T, "name">
+  items: Item[];
+  CardComponent?: ComponentType<T>;
+  additionalCardProps?: Omit<T, "name">;
 }
 
 export const List = <T extends CardComponentProps>({
@@ -52,7 +47,6 @@ export const List = <T extends CardComponentProps>({
 }: ListProps<T>) => {
   return (
     <div>
-
       {items.map((item, index) => {
         const props = {
           ...additionalCardProps,
