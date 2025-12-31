@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { Paths } from "@/constants/paths";
-import { Role } from "@prisma/client";
+import { Role } from "@/generated/prisma/client";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 

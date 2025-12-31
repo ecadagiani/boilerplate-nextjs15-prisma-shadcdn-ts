@@ -8,7 +8,7 @@ export const authConfig = {
   },
   debug: process.env.NODE_ENV === "development",
   session: {
-    strategy: "jwt", // for typescript, copy this value to auth.ts or middleware.ts
+    strategy: "jwt", // for typescript, copy this value to auth.ts or proxy.ts
   },
   callbacks: {
     jwt({ token, user }: { token: JWT, user: User }) { // {account, trigger}

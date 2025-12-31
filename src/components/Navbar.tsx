@@ -57,7 +57,7 @@ export default function Navbar({ session }: NavbarProps) {
       top-0 z-50 w-full px-6 py-4
       bg-white/75 dark:bg-zinc-950/75
       border-b border-zinc-200 dark:border-zinc-800
-      backdrop-blur supports-[backdrop-filter]:bg-background/60
+      backdrop-blur supports-backdrop-filter:bg-background/60
       flex justify-between items-center
     "
     >

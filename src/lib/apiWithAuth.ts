@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
+import type { Role } from "@/generated/prisma/client";
 import { forbidden, internalServerError, unauthorized } from "@/lib/apiResponse";
 import type { AppRouteHandlerFnContext, NextAuthRequest } from "@/lib/types/api";
-import type { Role } from "@prisma/client";
 import type { Session } from "next-auth";
 import type { NextResponse } from "next/server";
 

@@ -147,7 +147,7 @@ const PostEditorCard = memo(function PostEditorCard({
         "hover:shadow-lg transition-all duration-300",
         published
           ? "bg-white dark:bg-zinc-800"
-          : "bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-800",
+          : "bg-linear-to-br from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-800",
         "border",
         published
           ? "border-zinc-200 dark:border-zinc-700"

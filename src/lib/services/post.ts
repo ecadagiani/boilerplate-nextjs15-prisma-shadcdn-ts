@@ -1,11 +1,11 @@
 "use server";
 
 import { EXCERPT_RECOMMENDED_LENGTH } from "@/constants/post";
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { Post, PostDTOWithRelations } from "@/lib/types/posts";
 import { ensureServer } from "@/utils/ensureRuntime";
 import { excerptFromMarkdown } from "@/utils/string";
-import type { Prisma } from "@prisma/client";
 import BPromise from "bluebird";
 
 export async function mapPostDtoToDomain(

@@ -27,7 +27,7 @@ const PostCard = memo(function PostCard({
   title, author, categories, published, excerpt, slug,
 }: PostCardProps) {
   return (
-    <Link href={Paths.POST(slug)} className="block  [&_*]:cursor-pointer">
+    <Link href={Paths.POST(slug)} className="block  **:cursor-pointer">
       <Card className="
         overflow-hidden h-full bg-white dark:bg-zinc-800
         border border-zinc-200 dark:border-zinc-700

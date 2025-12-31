@@ -1,4 +1,4 @@
-import type { Post as PostDTO } from "@prisma/client";
+import type { Post as PostDTO } from "@/generated/prisma/client";
 export type { PostDTO };
 
 export interface PostDTOWithRelations extends PostDTO {

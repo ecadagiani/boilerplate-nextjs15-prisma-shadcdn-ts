@@ -1,6 +1,6 @@
+import type { Role } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import type { Role } from "@prisma/client";
 import bcrypt from "bcrypt";
 import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";

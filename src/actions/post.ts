@@ -1,5 +1,6 @@
 "use server";
 
+import { Role } from "@/generated/prisma/client";
 import { actionWithAuth } from "@/lib/actionWithAuth";
 import { createPost, deletePost, getPost, updatePost } from "@/lib/services/post";
 import type { ActionReturn } from "@/lib/types/action";
@@ -7,7 +8,6 @@ import { Post } from "@/lib/types/posts";
 import { postSchema } from "@/lib/validation/post";
 import { createPostServerSchema } from "@/lib/validation/postServer";
 import { transformZodErrors } from "@/utils/validation";
-import { Role } from "@prisma/client";
 import { z } from "zod";
 
 type PostSchemaInfer = z.infer<typeof postSchema>;

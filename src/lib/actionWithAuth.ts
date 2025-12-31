@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/generated/prisma/client";
 import type { Session } from "next-auth";
 import { ActionReturn } from "./types/action";
 

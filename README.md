@@ -9,7 +9,7 @@ A modern, Docker-ready full-stack template built with Next.js 15, Prisma ORM, an
 
 - 🚀 **Next.js 15** with App Router
 - ⚛️ **React 19** with server actions
-- 🛢️ **Prisma ORM** with PostgreSQL
+- 🛢️ **Prisma ORM 7** with PostgreSQL
 - 🎨 **shadcn/ui** components
 - 🔐 **NextAuth** for authentication (with simple role enum access control)
 - 🎯 **TypeScript** for type safety
@@ -37,7 +37,7 @@ cp .env.dist .env
 # Install dependencies
 npm install
 
-# Generate Prisma types
+# Generate Prisma Client (outputs to src/generated/prisma)
 npm run prisma:generate
 ```
 
@@ -109,7 +109,11 @@ npm run docker:prisma:migrate:dev
 2. The command will:
    - Create a new migration file
    - Apply the migration to your database
-   - Regenerate Prisma Client
+
+3. **Important**: In Prisma 7, you must now run the seed command explicitly after migrations:
+```bash
+npm run docker:prisma:db:seed
+```
 
 ## Development Workflow
 

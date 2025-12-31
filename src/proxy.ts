@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role } from "@/generated/prisma/client";
 import NextAuth, { type Session } from "next-auth";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -13,7 +13,7 @@ const { auth } = NextAuth({
   },
 });
 
-export default auth((request: NextRequest & { auth: Session | null }) => {
+const proxy = auth((request: NextRequest & { auth: Session | null }) => {
   const isConnected = request.auth !== null;
   const userRole = request.auth?.user?.role;
 
@@ -41,6 +41,8 @@ export default auth((request: NextRequest & { auth: Session | null }) => {
   response.headers.set("x-current-path", request.nextUrl.pathname);
   return response;
 });
+
+export default proxy;
 
 export const config = {
   matcher: [
