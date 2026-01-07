@@ -1,9 +1,10 @@
 # Next.js 15 Full-Stack Template
 
-// TODO: add disclaimer about this stack
-// Add a branch with cleaned project to be used at a good start
+// TODO: Add a branch with cleaned project to be used at a good start
 
 A modern, Docker-ready full-stack template built with Next.js 15, Prisma ORM, and shadcn/ui components. This template provides a robust starting point for building scalable web applications with a clean architecture and developer-friendly setup.
+
+This stack is on the latest trendy tools, is fast to create a simple website, but be cautious if you want to use it for a long/big project, maybe turn you to a better time proved solution.
 
 ## Features
 
