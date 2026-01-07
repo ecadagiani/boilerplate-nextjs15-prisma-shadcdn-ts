@@ -12,7 +12,7 @@ import type { Post } from "@/lib/types/posts";
 import { queryUserPosts } from "@/query/post";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Session } from "next-auth";
-import { useCallback, useMemo, useState } from "react";
+import { useState } from "react";
 
 export interface DashboardPostsPageProps {
   initialPosts: Post[];
@@ -49,20 +49,12 @@ const UserPostsList = ({
     initialData: initialPosts,
   });
 
-  const removePost = useCallback(
-    (postId: string) => {
-      queryClient.setQueryData(
-        ["posts", sortOrder, session.user.id],
-        posts.filter((post) => post.id !== postId),
-      );
-    },
-    [posts, sortOrder, session.user.id, queryClient],
-  );
-
-  const postCardComponentProps = useMemo(
-    () => ({ updateList: removePost }),
-    [removePost],
-  );
+  const removePost = (postId: string) => {
+    queryClient.setQueryData(
+      ["posts", sortOrder, session.user.id],
+      posts.filter((post) => post.id !== postId),
+    );
+  };
 
   return (
     <PostsList
@@ -72,7 +64,7 @@ const UserPostsList = ({
       isLoading={isLoading}
       PostCardComponent={DashboardPostCard}
       PostCardSkeletonComponent={PostEditorCardSkeleton}
-      additionalPostCardProps={postCardComponentProps}
+      additionalPostCardProps={{ updateList: removePost }}
     />
   );
 };

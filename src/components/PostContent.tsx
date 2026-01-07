@@ -1,4 +1,3 @@
-import { memo } from "react";
 import ReactMarkdown from "react-markdown";
 import { Skeleton } from "./ui/skeleton";
 
@@ -15,13 +14,13 @@ interface PostContentProps {
   isPreview?: boolean;
 }
 
-const PostContent = memo(function PostContent({
+const PostContent = ({
   content,
   author,
   categories,
   published,
   isPreview = false,
-}: PostContentProps) {
+}: PostContentProps) => {
   return (
     <article>
       <header className="mb-8">
@@ -46,11 +45,11 @@ const PostContent = memo(function PostContent({
       </div>
     </article>
   );
-});
+};
 
 export default PostContent;
 
-export const PostContentSkeleton = memo(function PostContentSkeleton() {
+export const PostContentSkeleton = () => {
   return (
     <>
       <header className="mb-8">
@@ -67,4 +66,4 @@ export const PostContentSkeleton = memo(function PostContentSkeleton() {
       </div>
     </>
   );
-});
+};

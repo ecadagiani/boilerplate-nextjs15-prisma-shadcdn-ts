@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import React, { memo } from "react";
+import React from "react";
 
 export interface BreadcrumbComponentProps {
   items: {
@@ -18,10 +18,7 @@ export interface BreadcrumbComponentProps {
   current?: string | React.ReactNode;
 }
 
-const BreadcrumbComponent = memo(function BreadcrumbComponent({
-  items,
-  current,
-}: BreadcrumbComponentProps) {
+const BreadcrumbComponent = ({ items, current }: BreadcrumbComponentProps) => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -54,8 +51,6 @@ const BreadcrumbComponent = memo(function BreadcrumbComponent({
       </BreadcrumbList>
     </Breadcrumb>
   );
-});
-
-BreadcrumbComponent.displayName = "BreadcrumbComponent";
+};
 
 export default BreadcrumbComponent;

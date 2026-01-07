@@ -21,7 +21,7 @@ import type { ActionReturn } from "@/lib/types/action";
 import { cn } from "@/utils/shadcn";
 import { Edit, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { memo, useTransition } from "react";
+import { useTransition } from "react";
 import DateDisplay from "./DateDisplay";
 import type { PostCardProps } from "./PostCard";
 
@@ -41,11 +41,11 @@ interface ButtonDeleteProps {
   isPending: boolean;
 }
 
-const ButtonDelete = memo(function ButtonDelete({
+const ButtonDelete = ({
   onDelete,
   isPublished,
   isPending,
-}: ButtonDeleteProps) {
+}: ButtonDeleteProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -85,9 +85,9 @@ const ButtonDelete = memo(function ButtonDelete({
       </AlertDialogContent>
     </AlertDialog>
   );
-});
+};
 
-const PostEditorCard = memo(function PostEditorCard({
+const PostEditorCard = ({
   id,
   title,
   author,
@@ -99,7 +99,7 @@ const PostEditorCard = memo(function PostEditorCard({
   slug,
   actionDelete,
   updateList,
-}: PostEditorCardProps) {
+}: PostEditorCardProps) => {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
@@ -274,7 +274,7 @@ const PostEditorCard = memo(function PostEditorCard({
       </CardContent>
     </Card>
   );
-});
+};
 
 export default PostEditorCard;
 

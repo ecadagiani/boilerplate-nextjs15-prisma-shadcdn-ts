@@ -8,14 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Paths } from "@/constants/paths";
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useActionState, useMemo } from "react";
+import { useActionState } from "react";
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
-  const redirectTo = useMemo(
-    () => searchParams.get("callbackUrl") ?? Paths.HOME,
-    [searchParams],
-  );
+  const redirectTo = searchParams.get("callbackUrl") ?? Paths.HOME;
 
   const [loginState, formAction, isPending] = useActionState<
     LoginResult,

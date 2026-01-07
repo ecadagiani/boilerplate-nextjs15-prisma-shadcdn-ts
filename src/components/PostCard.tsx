@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Paths } from "@/constants/paths";
 import Link from "next/link";
-import { memo } from "react";
 import DateDisplay from "./DateDisplay";
 import { Badge } from "./ui/badge";
 
@@ -21,14 +20,14 @@ export interface PostCardProps {
   slug: string;
 }
 
-const PostCard = memo(function PostCard({
+const PostCard = ({
   title,
   author,
   categories,
   published,
   excerpt,
   slug,
-}: PostCardProps) {
+}: PostCardProps) => {
   return (
     <Link href={Paths.POST(slug)} className="block  **:cursor-pointer">
       <Card
@@ -70,7 +69,7 @@ const PostCard = memo(function PostCard({
       </Card>
     </Link>
   );
-});
+};
 
 export default PostCard;
 

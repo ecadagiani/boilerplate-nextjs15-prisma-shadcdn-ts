@@ -1,5 +1,4 @@
 import { cn } from "@/utils/shadcn";
-import { memo } from "react";
 
 export interface DefaultLayoutProps {
   className?: string;
@@ -14,14 +13,14 @@ export const defaultTitleClassName =
   "text-5xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-6xl";
 export const defaultDescriptionClassName =
   "text-lg text-zinc-600 dark:text-zinc-400 mx-auto px-8";
-export default memo(function DefaultLayout({
+const DefaultLayout = ({
   className,
   title,
   titleClassName = defaultTitleClassName,
   description,
   descriptionClassName = defaultDescriptionClassName,
   children,
-}: DefaultLayoutProps) {
+}: DefaultLayoutProps) => {
   return (
     <main
       className={cn("min-h-screen bg-white dark:bg-zinc-950 pt-4", className)}
@@ -33,4 +32,6 @@ export default memo(function DefaultLayout({
       {children}
     </main>
   );
-});
+};
+
+export default DefaultLayout;
