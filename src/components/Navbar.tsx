@@ -104,7 +104,7 @@ const Navbar = ({ session }: NavbarProps) => {
           )}
         </NavigationMenuList>
       </NavigationMenu>
-      <NavigationMenu withViewport={false}>
+      <NavigationMenu>
         <NavigationMenuList>
           {status === "authenticated" ? (
             <NavigationMenuItem>
