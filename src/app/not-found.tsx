@@ -19,15 +19,14 @@ const NotFound = () => {
           </p>
         </div>
         <div className="h-px w-32 bg-gray-200 mx-auto my-8" />
-        <Link href={Paths.HOME} legacyBehavior passHref>
-          <Button
-            variant="default"
-            size="lg"
-            className="tracking-wider hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-          >
-            BACK TO EARTH
-          </Button>
-        </Link>
+        <Button
+          variant="default"
+          size="lg"
+          className="tracking-wider hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+          asChild
+        >
+          <Link href={Paths.HOME}>BACK TO EARTH</Link>
+        </Button>
       </div>
     </div>
   );
