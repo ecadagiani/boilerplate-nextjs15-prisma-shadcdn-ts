@@ -1,9 +1,10 @@
-import { auth } from "@/auth";
 import Navbar from "@/components/Navbar";
+import NavbarWrapper from "@/components/NavbarWrapper";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -29,14 +30,15 @@ const RootLayout = async ({
   breadcrumb: React.ReactNode;
   children: React.ReactNode;
 }>) => {
-  const session = await auth();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <Navbar session={session} />
+          <Suspense fallback={<Navbar session={null} />}>
+            <NavbarWrapper />
+          </Suspense>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
             {breadcrumb}
             {children}
