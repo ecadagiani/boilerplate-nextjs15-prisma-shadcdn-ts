@@ -20,7 +20,8 @@
     "docker:prisma:migrate:dev": "docker compose exec nextjs npx prisma migrate dev",
     "docker:prisma:db:push": "docker compose exec nextjs npx prisma db push",
     "docker:prisma:db:seed": "docker compose exec nextjs npx prisma db seed",
-    "shadcn:add": "npx shadcn@latest add"
+    "shadcn:add": "npx shadcn@latest add",
+    "shadcn:update": "npx shadcn@latest add --overwrite"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

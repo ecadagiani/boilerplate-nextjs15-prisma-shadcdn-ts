@@ -192,6 +192,26 @@ export async function updatePost({
   return getPost({ id: result.id });
 }
 
+export async function setPublishStatus({
+  id,
+  publish,
+}: {
+  id: string;
+  publish: boolean;
+}) {
+  ensureServer("services/setPublishStatus");
+
+  const result = await prisma.post.update({
+    where: { id },
+    data: {
+      published: publish ? new Date() : null,
+    },
+  });
+
+  if (!result) return undefined;
+  return getPost({ id: result.id });
+}
+
 export async function checkSlugExists(slug: string, excludePostId?: string) {
   const where: Prisma.PostWhereInput = { slug };
   if (excludePostId) where.id = { not: excludePostId };

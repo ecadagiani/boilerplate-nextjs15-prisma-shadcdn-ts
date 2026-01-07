@@ -6,6 +6,7 @@ import {
   createPost,
   deletePost,
   getPost,
+  setPublishStatus,
   updatePost,
 } from "@/lib/services/post";
 import type { ActionReturn } from "@/lib/types/action";
@@ -164,6 +165,54 @@ export const deletePostAction = actionWithAuth<
     return {
       ok: false,
       errors: "An unexpected error occurred. Could not delete post.",
+    };
+  }
+});
+
+export const setPublishStatusPostAction = actionWithAuth<
+  [string, boolean],
+  ActionReturn<{ post?: Post }>
+>({ roles: [Role.USER, Role.ADMIN] }, async (session, postId, publish) => {
+  try {
+    // Check if post exists and user owns it
+    const existingPost = await getPost({ id: postId });
+    if (!existingPost) {
+      return {
+        ok: false,
+        errors: "Post not found",
+      };
+    }
+
+    // Check if user owns the post
+    if (existingPost.author.id !== session.user.id) {
+      return {
+        ok: false,
+        errors: "You do not have permission to update this post",
+      };
+    }
+
+    const result = await setPublishStatus({
+      id: existingPost.id,
+      publish,
+    });
+
+    if (!result) {
+      return {
+        ok: false,
+        errors:
+          "An unexpected error occurred. Could not update publish status.",
+      };
+    }
+
+    return {
+      ok: true,
+      post: result,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      ok: false,
+      errors: "An unexpected error occurred. Could not update publish status.",
     };
   }
 });
