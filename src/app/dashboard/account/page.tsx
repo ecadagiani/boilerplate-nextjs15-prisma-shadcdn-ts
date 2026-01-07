@@ -4,7 +4,7 @@ import type { Session } from "next-auth";
 
 const AccountPage = async () => {
   const session = (await auth()) as Session;
-  // TODO: move this out of the dashboard, and use AccessControl
+
   return (
     <DefaultLayout title="My Account">
       <div className="space-y-4 p-4">

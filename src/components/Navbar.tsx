@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Paths } from "@/constants/paths";
 import { cn } from "@/utils/shadcn";
-import { Home, Pencil, PlusCircle, User } from "lucide-react";
+import { Home, Pencil, PlusCircle, Shield, User } from "lucide-react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 
@@ -47,8 +47,8 @@ export interface NavbarProps {
 
 const Navbar = ({ session }: NavbarProps) => {
   const status = session ? "authenticated" : "unauthenticated";
-  const sessionData = session;
-  // const { data: sessionData, status } = useSession();
+  const sessionUser = session?.user;
+
   return (
     <header
       className="
@@ -100,6 +100,20 @@ const Navbar = ({ session }: NavbarProps) => {
                   New Post
                 </Link>
               </NavigationMenuItem>
+              {sessionUser?.role === "ADMIN" && (
+                <NavigationMenuItem>
+                  <Link
+                    href={Paths.ADMIN}
+                    className={cn(
+                      navigationMenuTriggerStyle(),
+                      "flex items-center gap-2 bg-transparent",
+                    )}
+                  >
+                    <Shield className="h-4 w-4" />
+                    Admin
+                  </Link>
+                </NavigationMenuItem>
+              )}
             </>
           )}
         </NavigationMenuList>
@@ -110,7 +124,7 @@ const Navbar = ({ session }: NavbarProps) => {
             <NavigationMenuItem>
               <NavigationMenuTrigger className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span className="text-sm">{sessionData?.user.name}</span>
+                <span className="text-sm">{sessionUser?.name}</span>
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <UserNavigation />
@@ -124,7 +138,7 @@ const Navbar = ({ session }: NavbarProps) => {
             </NavigationMenuItem>
           )}
         </NavigationMenuList>
-        <NavigationMenuViewport right />
+        <NavigationMenuViewport />
       </NavigationMenu>
     </header>
   );
