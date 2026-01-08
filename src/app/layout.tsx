@@ -1,6 +1,6 @@
-import Navbar from "@/components/Navbar";
-import NavbarWrapper from "@/components/NavbarWrapper";
-import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
+import Navbar from "@/components/navbar";
+import NavbarWrapper from "@/components/navbar-wrapper";
+import ReactQueryProvider from "@/components/providers/react-query-provider";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";

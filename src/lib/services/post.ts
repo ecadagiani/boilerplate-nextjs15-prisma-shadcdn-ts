@@ -4,7 +4,7 @@ import { EXCERPT_RECOMMENDED_LENGTH } from "@/constants/post";
 import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import type { Post, PostDTOWithRelations } from "@/lib/types/posts";
-import { ensureServer } from "@/utils/ensureRuntime";
+import { ensureServer } from "@/utils/ensure-runtime";
 import { excerptFromMarkdown } from "@/utils/string";
 import BPromise from "bluebird";
 

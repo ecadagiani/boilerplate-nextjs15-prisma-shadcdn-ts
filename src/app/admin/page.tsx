@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import DateDisplay from "@/components/DateDisplay";
+import DateDisplay from "@/components/date-display";
 import {
   Table,
   TableBody,

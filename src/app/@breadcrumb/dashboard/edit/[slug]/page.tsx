@@ -1,4 +1,4 @@
-import BreadcrumbComponent from "@/components/BreadcrumbComponent";
+import BreadcrumbComponent from "@/components/breadcrumb-component";
 import { Paths } from "@/constants/paths";
 import { getPost } from "@/lib/services/post";
 import { notFound } from "next/navigation";

@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import LoginForm from "@/components/auth/LoginForm";
+import LoginForm from "@/components/auth/login-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,

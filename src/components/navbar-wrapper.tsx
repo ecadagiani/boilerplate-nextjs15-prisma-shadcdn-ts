@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import Navbar from "./Navbar";
+import Navbar from "./navbar";
 
 const NavbarWrapper = async () => {
   const session = await auth();

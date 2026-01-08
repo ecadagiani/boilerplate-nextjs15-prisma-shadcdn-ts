@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
-import DefaultLayout from "@/components/DefaultLayout";
+import DefaultLayout from "@/components/default-layout";
 import { getPosts } from "@/lib/services/post";
 import type { SortOrder } from "@/lib/types/api";
 import type { Session } from "next-auth";
-import UserPostsList from "./UserPostsList";
+import UserPostsList from "./user-posts-list";
 
 const DashboardPage = async () => {
   const session = (await auth()) as Session;

@@ -1,7 +1,7 @@
 "use server";
 
 import { Role } from "@/generated/prisma/client";
-import { actionWithAuth } from "@/lib/actionWithAuth";
+import { actionWithAuth } from "@/lib/action-with-auth";
 import {
   createPost,
   deletePost,
@@ -12,7 +12,7 @@ import {
 import type { ActionReturn } from "@/lib/types/action";
 import type { Post } from "@/lib/types/posts";
 import type { postSchema } from "@/lib/validation/post";
-import { createPostServerSchema } from "@/lib/validation/postServer";
+import { createPostServerSchema } from "@/lib/validation/post-server";
 import { transformZodErrors } from "@/utils/validation";
 import { z } from "zod";
 

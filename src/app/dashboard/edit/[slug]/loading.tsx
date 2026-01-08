@@ -1,5 +1,5 @@
-import DefaultLayout from "@/components/DefaultLayout";
-import { PostEditorSkeleton } from "@/components/PostEditor";
+import DefaultLayout from "@/components/default-layout";
+import { PostEditorSkeleton } from "@/components/post-editor";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const LoadingEditPost = async () => {

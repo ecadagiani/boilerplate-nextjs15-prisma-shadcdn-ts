@@ -1,8 +1,8 @@
 import { updatePostAction } from "@/actions/post";
 import { auth } from "@/auth";
-import DefaultLayout from "@/components/DefaultLayout";
-import PostEditor from "@/components/PostEditor";
-import { PublishButton } from "@/components/PublishButton";
+import DefaultLayout from "@/components/default-layout";
+import PostEditor from "@/components/post-editor";
+import { PublishButton } from "@/components/publish-button";
 import { getCategories } from "@/lib/services/categories";
 import { getPost } from "@/lib/services/post";
 import { notFound } from "next/navigation";

@@ -1,5 +1,5 @@
-import DefaultLayout from "@/components/DefaultLayout";
-import { PostContentSkeleton } from "@/components/PostContent";
+import DefaultLayout from "@/components/default-layout";
+import { PostContentSkeleton } from "@/components/post-content";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const LoadingPreviewPost = () => {

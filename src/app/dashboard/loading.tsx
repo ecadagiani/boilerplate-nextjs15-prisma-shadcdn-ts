@@ -1,6 +1,6 @@
-import DefaultLayout from "@/components/DefaultLayout";
-import { PostEditorCardSkeleton } from "@/components/PostEditorCard";
-import PostsList from "@/components/PostsList";
+import DefaultLayout from "@/components/default-layout";
+import { PostEditorCardSkeleton } from "@/components/post-editor-card";
+import PostsList from "@/components/posts-list";
 
 const DashboardLoadingPage = () => {
   return (

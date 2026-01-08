@@ -1,4 +1,4 @@
-import PostCard, { PostCardSkeleton } from "@/components/PostCard";
+import PostCard, { PostCardSkeleton } from "@/components/post-card";
 import {
   Select,
   SelectContent,

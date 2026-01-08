@@ -1,4 +1,4 @@
-import { internalServerError, jsonData } from "@/lib/apiResponse";
+import { internalServerError, jsonData } from "@/lib/api-response";
 import { getPosts } from "@/lib/services/post";
 import type { Post } from "@/lib/types/posts";
 

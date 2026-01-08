@@ -1,4 +1,4 @@
-import apiWithAuth from "@/lib/apiWithAuth";
+import apiWithAuth from "@/lib/api-with-auth";
 import { getPosts } from "@/lib/services/post";
 import type {
   AppRouteHandlerFnContext,

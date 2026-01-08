@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import DefaultLayout from "@/components/DefaultLayout";
+import DefaultLayout from "@/components/default-layout";
 import type { Session } from "next-auth";
 
 const AccountPage = async () => {

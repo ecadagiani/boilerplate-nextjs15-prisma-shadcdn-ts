@@ -1,4 +1,4 @@
-import BreadcrumbComponent from "@/components/BreadcrumbComponent";
+import BreadcrumbComponent from "@/components/breadcrumb-component";
 const BreadcrumbSlot = () => {
   return (
     <BreadcrumbComponent

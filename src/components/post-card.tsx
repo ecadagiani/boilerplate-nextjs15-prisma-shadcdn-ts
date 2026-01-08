@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Paths } from "@/constants/paths";
 import Link from "next/link";
-import DateDisplay from "./DateDisplay";
+import DateDisplay from "./date-display";
 import { Badge } from "./ui/badge";
 
 export interface PostCardProps {

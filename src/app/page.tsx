@@ -2,8 +2,8 @@
 
 import DefaultLayout, {
   defaultTitleClassName,
-} from "@/components/DefaultLayout";
-import PostsList from "@/components/PostsList";
+} from "@/components/default-layout";
+import PostsList from "@/components/posts-list";
 import type { SortOrder } from "@/lib/types/api";
 import { queryPosts } from "@/query/post";
 import { cn } from "@/utils/shadcn";

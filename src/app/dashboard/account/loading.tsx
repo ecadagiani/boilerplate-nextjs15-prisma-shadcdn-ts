@@ -1,4 +1,4 @@
-import DefaultLayout from "@/components/DefaultLayout";
+import DefaultLayout from "@/components/default-layout";
 
 const AccountLoadingPage = () => {
   return <DefaultLayout title="My Account">Loading...</DefaultLayout>;

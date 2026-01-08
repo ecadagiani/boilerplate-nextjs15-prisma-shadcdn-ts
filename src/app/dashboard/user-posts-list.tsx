@@ -1,12 +1,12 @@
 "use client";
 
 import { deletePostAction } from "@/actions/post";
-import type { PostEditorCardProps } from "@/components/PostEditorCard";
+import type { PostEditorCardProps } from "@/components/post-editor-card";
 import PostEditorCard, {
   PostEditorCardSkeleton,
-} from "@/components/PostEditorCard";
-import type { AdditionalPostCardProps } from "@/components/PostsList";
-import PostsList from "@/components/PostsList";
+} from "@/components/post-editor-card";
+import type { AdditionalPostCardProps } from "@/components/posts-list";
+import PostsList from "@/components/posts-list";
 import type { SortOrder } from "@/lib/types/api";
 import type { Post } from "@/lib/types/posts";
 import { queryUserPosts } from "@/query/post";

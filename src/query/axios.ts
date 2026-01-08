@@ -1,4 +1,4 @@
-import { ensureClient } from "@/utils/ensureRuntime";
+import { ensureClient } from "@/utils/ensure-runtime";
 import axios from "axios";
 
 const api = axios.create({

@@ -1,4 +1,4 @@
-import BreadcrumbComponent from "@/components/BreadcrumbComponent";
+import BreadcrumbComponent from "@/components/breadcrumb-component";
 import { Paths } from "@/constants/paths";
 const BreadcrumbSlot = () => {
   return (

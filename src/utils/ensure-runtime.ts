@@ -1,4 +1,9 @@
 /**
+ * This function is intended as a development helper, not for use in production projects.
+ * It helps you verify and understand when a function is correctly called from a server or client component.
+ */
+
+/**
  * Ensures a function is only called in client components
  * @throws Error if called in a server component
  */

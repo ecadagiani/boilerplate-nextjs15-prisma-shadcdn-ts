@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import nextPlugin from "@next/eslint-plugin-next";
+import checkFile from "eslint-plugin-check-file";
 import prettierPluginRecommended from "eslint-plugin-prettier/recommended";
 import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
@@ -60,11 +61,31 @@ const allPackagesRules: ConfigWithExtends["rules"] = {
   ],
 };
 
+/**
+ * CHECK_FILES_RULES
+ * are applied to ts,tsx files in the src folder
+ */
+const checkFilesRules: ConfigWithExtends["rules"] = {
+  "check-file/filename-naming-convention": [
+    "error",
+    {
+      "**/*.{ts,tsx}": "KEBAB_CASE",
+    },
+  ],
+};
+
 export default defineConfig([
   // order of each config is important, please change them with extreme caution
 
   includeIgnoreFile(rootPath(".gitignore")),
-  globalIgnores([".next/*", "node_modules/*", "public/*", "**/*.d.ts"]),
+  globalIgnores([
+    ".next/*",
+    "node_modules/*",
+    "public/*",
+    "**/*.d.ts",
+    "src/components/ui/**",
+    "src/generated/**",
+  ]),
   js.configs.recommended,
   ...tseslint.configs.strict,
   {
@@ -104,6 +125,17 @@ export default defineConfig([
   {
     name: "GlobalRules",
     rules: allPackagesRules,
+  },
+
+  /* CHECK FILES RULES */
+  {
+    name: "CheckFilesRules",
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["**/*.config.ts"],
+    plugins: {
+      "check-file": checkFile,
+    },
+    rules: checkFilesRules,
   },
 
   prettierPluginRecommended,

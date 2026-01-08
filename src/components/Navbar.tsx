@@ -1,4 +1,4 @@
-import LogoutButton from "@/components/auth/LogoutButton";
+import LogoutButton from "@/components/auth/logout-button";
 import {
   NavigationMenu,
   NavigationMenuContent,

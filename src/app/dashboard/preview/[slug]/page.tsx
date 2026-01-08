@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
 import DefaultLayout, {
   defaultTitleClassName,
-} from "@/components/DefaultLayout";
-import PostContent from "@/components/PostContent";
+} from "@/components/default-layout";
+import PostContent from "@/components/post-content";
 import { getPost } from "@/lib/services/post";
 import { cn } from "@/utils/shadcn";
 import { notFound } from "next/navigation";

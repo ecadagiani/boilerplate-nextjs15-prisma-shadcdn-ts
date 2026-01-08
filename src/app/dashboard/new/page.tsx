@@ -1,6 +1,6 @@
 import { createPostAction } from "@/actions/post";
-import DefaultLayout from "@/components/DefaultLayout";
-import PostEditor from "@/components/PostEditor";
+import DefaultLayout from "@/components/default-layout";
+import PostEditor from "@/components/post-editor";
 import { getCategories } from "@/lib/services/categories";
 
 const NewPostPage = async () => {

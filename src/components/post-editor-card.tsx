@@ -22,8 +22,8 @@ import { cn } from "@/utils/shadcn";
 import { Edit, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useTransition } from "react";
-import DateDisplay from "./DateDisplay";
-import type { PostCardProps } from "./PostCard";
+import DateDisplay from "./date-display";
+import type { PostCardProps } from "./post-card";
 
 export interface PostEditorCardProps extends PostCardProps {
   id: string;

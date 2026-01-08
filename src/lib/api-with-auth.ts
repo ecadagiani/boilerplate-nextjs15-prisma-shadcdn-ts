@@ -4,7 +4,7 @@ import {
   forbidden,
   internalServerError,
   unauthorized,
-} from "@/lib/apiResponse";
+} from "@/lib/api-response";
 import type {
   AppRouteHandlerFnContext,
   NextAuthRequest,
