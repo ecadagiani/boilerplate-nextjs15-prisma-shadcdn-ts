@@ -20,8 +20,9 @@ import {
   EXCERPT_MAX_LENGTH,
   EXCERPT_RECOMMENDED_LENGTH,
 } from "@/constants/post";
+import { useDebounce } from "@/hooks/use-debounce";
+import { useIsDirty } from "@/hooks/use-is-dirty";
 import { useToast } from "@/hooks/use-toast";
-import { useIsDirty } from "@/hooks/useIsDirty";
 import type { ActionReturn } from "@/lib/types/action";
 import type { Post } from "@/lib/types/posts";
 import { postSchema } from "@/lib/validation/post";
@@ -30,13 +31,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useDeferredValue, useEffect, useTransition } from "react";
+import { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { MultiSelect } from "./ui/multi-select";
 
-// this file need to be splitted, and move post domain logic to a specific hook
-// but as this rest is only as an example of a form, this file is a good start
+// In a production project, this file should be split up and the post domain logic moved to a dedicated hook.
+// However, since this is just an example project, I will keep everything in a single file.
 
 type PostSchemaInfer = z.infer<typeof postSchema>;
 
@@ -112,43 +113,6 @@ const PostEditor = ({
 
   const isDirty = useIsDirty(form);
 
-  // auto-generate slug from title
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const title = form.watch("title");
-  const previousTitle = useDeferredValue(title);
-  useEffect(() => {
-    if (!previousTitle && !title) return; // avoid form.setValue on initial render
-
-    const currentSlug = form.getValues("slug");
-    const slugifiedPreviousTitle = slugify(previousTitle);
-    if (!currentSlug || currentSlug === slugifiedPreviousTitle) {
-      form.setValue("slug", slugify(title));
-    }
-  }, [title, previousTitle, form]);
-
-  // auto-generate excerpt from content
-  const content = form.watch("content");
-  const previousContent = useDeferredValue(content);
-  useEffect(() => {
-    if (!previousContent && !content) return; // avoid form.setValue on initial render
-
-    // TODO: debounce this, or find a solution, when user is typing fast, the excerpt is not updated
-    (async () => {
-      const currentExcerpt = form.getValues("excerpt");
-      const excerptFromPreviousContent = await excerptFromMarkdown(
-        previousContent,
-        EXCERPT_RECOMMENDED_LENGTH,
-      );
-      if (currentExcerpt === excerptFromPreviousContent) {
-        const newExcerpt = await excerptFromMarkdown(
-          content,
-          EXCERPT_RECOMMENDED_LENGTH,
-        );
-        form.setValue("excerpt", newExcerpt);
-      }
-    })();
-  }, [content, previousContent, form]);
-
   // submit form data to action
   async function onSubmit(data: PostSchemaInfer) {
     const formData = new FormData();
@@ -214,6 +178,54 @@ const PostEditor = ({
       }
     });
   }
+  const lastSyncedContentRef = useRef(post?.content || "");
+
+  const debouncedUpdateExcerpt = useDebounce(async (content: string) => {
+    const newContent = content;
+    const currentExcerpt = form.getValues("excerpt");
+    const oldContent = lastSyncedContentRef.current;
+
+    const excerptFromOldContent = await excerptFromMarkdown(
+      oldContent,
+      EXCERPT_RECOMMENDED_LENGTH,
+    );
+    if (!currentExcerpt || currentExcerpt === excerptFromOldContent) {
+      const newExcerpt = await excerptFromMarkdown(
+        newContent,
+        EXCERPT_RECOMMENDED_LENGTH,
+      );
+      form.setValue("excerpt", newExcerpt, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      lastSyncedContentRef.current = newContent;
+    }
+  }, 500);
+
+  const handleTitleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: React.ChangeEvent<HTMLInputElement>) => void,
+  ) => {
+    const newTitle = e.target.value;
+    const currentSlug = form.getValues("slug");
+    const slugifiedOldTitle = slugify(form.getValues("title"));
+
+    if (!currentSlug || currentSlug === slugifiedOldTitle) {
+      form.setValue("slug", slugify(newTitle), {
+        shouldValidate: true,
+      });
+    }
+    fieldChange(e);
+  };
+
+  const handleContentChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    fieldChange: (value: React.ChangeEvent<HTMLTextAreaElement>) => void,
+  ) => {
+    const newContent = e.target.value;
+    fieldChange(e);
+    debouncedUpdateExcerpt(newContent);
+  };
 
   return (
     <div className="max-w-4xl mx-auto pb-8">
@@ -227,7 +239,11 @@ const PostEditor = ({
                 <FormItem>
                   <FormLabel aria-required>Title*</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter post title" {...field} />
+                    <Input
+                      placeholder="Enter post title"
+                      {...field}
+                      onChange={(e) => handleTitleChange(e, field.onChange)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -283,6 +299,7 @@ const PostEditor = ({
                       placeholder="Write your post content in markdown..."
                       className="min-h-[150px]"
                       {...field}
+                      onChange={(e) => handleContentChange(e, field.onChange)}
                     />
                   </FormControl>
                   <FormMessage />
