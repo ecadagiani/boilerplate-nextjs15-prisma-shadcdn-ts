@@ -1,35 +1,39 @@
-"use client";
-
-import DefaultLayout, {
-  defaultTitleClassName,
-} from "@/components/default-layout";
-import PostsList from "@/components/posts-list";
-import type { SortOrder } from "@/lib/types/api";
-import { queryPosts } from "@/query/post";
-import { cn } from "@/utils/shadcn";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const Home = () => {
-  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ["posts", sortOrder],
-    queryFn: () => queryPosts({ sortOrder }),
-  });
-
   return (
-    <DefaultLayout
-      title="Welcome to my Blog"
-      titleClassName={cn("text-center", defaultTitleClassName)}
-      description="Explore my thoughts, ideas, and insights about technology, development, and beer making."
-    >
-      <PostsList
-        onSortChange={setSortOrder}
-        sortOrder={sortOrder}
-        posts={posts}
-        isLoading={isLoading}
-      />
-    </DefaultLayout>
+    <div className="flex min-h-screen flex-col items-center justify-center p-4">
+      <Card className="w-full max-w-2xl">
+        <CardHeader className="text-center">
+          <CardTitle className="text-4xl font-bold">
+            Next.js 15 Boilerplate
+          </CardTitle>
+          <CardDescription className="text-lg mt-2">
+            A modern, production-ready starter template with Next.js 15, Prisma,
+            and shadcn/ui
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold">Features</h3>
+            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+              <li>Next.js 15 with App Router</li>
+              <li>TypeScript for type safety</li>
+              <li>Prisma ORM with PostgreSQL</li>
+              <li>NextAuth.js for authentication</li>
+              <li>shadcn/ui components</li>
+              <li>Tailwind CSS for styling</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 export default Home;

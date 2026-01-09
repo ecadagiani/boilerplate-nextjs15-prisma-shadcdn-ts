@@ -1,10 +1,5 @@
-import Navbar from "@/components/navbar";
-import NavbarWrapper from "@/components/navbar-wrapper";
-import ReactQueryProvider from "@/components/providers/react-query-provider";
-import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Suspense } from "react";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -19,15 +14,14 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "Blog",
+  title: "Next.js 15 Boilerplate",
+  description:
+    "A modern, production-ready starter template with Next.js 15, Prisma, NextAuth, and shadcn/ui",
 };
 
 const RootLayout = async ({
-  breadcrumb,
   children,
 }: Readonly<{
-  breadcrumb: React.ReactNode;
   children: React.ReactNode;
 }>) => {
   return (
@@ -35,16 +29,9 @@ const RootLayout = async ({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReactQueryProvider>
-          <Suspense fallback={<Navbar session={null} />}>
-            <NavbarWrapper />
-          </Suspense>
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
-            {breadcrumb}
-            {children}
-          </div>
-          <Toaster />
-        </ReactQueryProvider>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-2">
+          {children}
+        </div>
       </body>
     </html>
   );
